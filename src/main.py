@@ -582,7 +582,7 @@ add_message_set(ignore.get_msgs())
 add_message_set(remember.get_msgs())
 add_message_set(basics.get_msgs())         
 
-# lmao yeah i'm not putting the bot token on github lol
+# lmao no i'm not letting the bot token appear on github
 client.run(os.getenv("DISCORD-TOKEN"))
 
 
