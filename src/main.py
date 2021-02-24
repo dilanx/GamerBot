@@ -168,7 +168,7 @@ class Ignore:
                 writer.write(l + "\n")
             
     def _load(self):
-        with open("dat/ignore.txt", "r") as reader:
+        with open("data/ignore.txt", "r") as reader:
             self.ignore = reader.readlines()
         
         for i in range(len(self.ignore)):
