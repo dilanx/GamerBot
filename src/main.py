@@ -42,7 +42,11 @@ class Basics:
             
             message_set(self.i_love_you,
                         ["i love you", "ily", "uwu"],
-                        [":)"])]
+                        [":)"]),
+            
+            message_set(self.pog,
+                        ["pog"],
+                        ["PogChamp"])]
         
     def get_msgs(self):
         return self.set
@@ -80,6 +84,10 @@ class Basics:
             return None
         
         return [message.author.display_name]
+    
+    def pog(self, message):
+        
+        return [""]
 
 class Ignore:
     
