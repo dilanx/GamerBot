@@ -4,6 +4,6 @@ Hello okay I've never made anything with Python before so I thought I'd learn it
   
 Also most of the code is in one file because when I tried putting them in multiple files I kept getting circular dependency errors and I didn't really know nor have the time to learn how to fix that so whatever. The code is still structured in a way that I can separate out into separate files later on.
 
-gamer bot is lovely :)
+gamer bot pog uwu :)
 
 Made Feb 23, 2021
