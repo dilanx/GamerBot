@@ -1,7 +1,7 @@
 import discord
 import sys
 import os
-from message_groups import message_set, profile_set
+from message_groups import message_set, profile_set, spd
 from utility import get_ping_id
 from dotenv import load_dotenv
 
@@ -172,7 +172,7 @@ class Ignore:
             
     def _save(self):
         with open("data/ignore.txt", "w") as writer:
-            for l in self.data:
+            for l in self.ignore:
                 writer.write(l + "\n")
             
     def _load(self):
@@ -519,6 +519,7 @@ class Remember:
                 st += ", " + val[i].get_name()
                 
         return [st]
+    
 
 def add_message_set(init):
     
@@ -528,6 +529,8 @@ def add_message_set(init):
 basics = Basics()
 ignore = Ignore()
 remember = Remember()
+
+whitelist = ["Blockhead7360#5000"]
 
 @client.event
 async def on_message(message):
@@ -540,23 +543,43 @@ async def on_message(message):
     
     if name in message.content:
         
-        if str(message.author) == "Blockhead7360#5000":
+        if message.content.startswith(name + " /"):
             
-            if message.content.startswith(name + " /"):
+            cmd = message.content.partition(name + " /")[2]
+
+            
+            if cmd == "version":
+                await message.channel.send(VERSION)
+                return
+            
+            if cmd.startswith("forcesend "):
                 
-                cmd = message.content.partition(name + " /")[2]
-                
-                if cmd == "version":
-                    await message.channel.send(VERSION)
+                if str(message.author) in whitelist:
+
+                    await message.channel.send(cmd.partition("forcesend ")[2])
                     return
+                
+                else:
+                    await message.channel.send("you aren't whitelisted to use /forcesend.")
+                    return
+                
+            if cmd.startswith("spd "):
+                
+                if str(message.author) in whitelist:
                     
-                if cmd == "stop":
-                    await message.channel.send("already? well i guess i'll see you another time o7. shutting down now.")
-                    sys.exit(0)
+                    split = cmd.partition("spd ")[2].split(" ")
+                    
+                    if len(split) != 2:
+                        await message.channel.send("fail.")
+                        return
+                    
+                    spd.add_to_map(split[0], split[1])
+                    
+                    await message.channel.send("updated subject pronoun dictionary: " + split[0] + " -> " + split[1])
                     return
                 
-                if cmd.startswith("forceregister"):
-                    await message.channel.send("you'll have to do it in the files atm :(")
+                else:
+                    await message.channel.send("you aren't whitelisted to use /spd.")
                     return
         
         for s in sets:

@@ -1,4 +1,7 @@
 import random
+import utility
+
+spd = utility.SubjectPronounDictionary()
 
 class message_set:
     
@@ -122,7 +125,25 @@ class profile_set:
     def _format(self, msg, use_you):
         
         if use_you: msg = msg.replace("%0", "you").replace("%1", "you").replace("%2", "your").replace("%3", "are")
-        else: msg = msg.replace("%0", self.pronouns[0]).replace("%1", self.pronouns[1]).replace("%2", self.pronouns[2]).replace("%3", self.pronouns[3])
+        else:
+            msg = msg.replace("%0", self.pronouns[0]).replace("%1", self.pronouns[1]).replace("%2", self.pronouns[2]).replace("%3", self.pronouns[3])
+            
+            st = msg.split(" ")
+            
+            if self.pronouns[0] != "they":
+                for i in range(len(st)):
+                    
+                    if st[i] == self.pronouns[0]:
+                        
+                        j = i + 1
+                        
+                        if j < len(st):
+                            
+                            if st[j] in spd.get_map().keys():
+                                st[j] = spd.get_map()[st[j]]   
+                    
+                msg = " ".join(st)
+            
         return msg
         
     
@@ -149,7 +170,7 @@ class profile_set:
     
     def save(self):
         
-        with open("profiles/" + self.number + ".txt", "w") as writer:
+        with open("data/profiles/" + self.number + ".txt", "w") as writer:
             writer.write(self.name + "\n")
             writer.write(str(self.pronouns) + "\n")
             if self.data[0] is not None:
