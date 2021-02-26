@@ -1,5 +1,6 @@
 import random
 import utility
+import os
 
 spd = utility.SubjectPronounDictionary()
 
@@ -66,8 +67,8 @@ class profile_set:
         
         if msg in self.data: return False
         
-        if self.data[0] is None: self.data[0] = msg.strip()
-        else: self.data.append(msg.strip())
+        if self.data[0] is None: self.data[0] = msg
+        else: self.data.append(msg)
         
         self.save()
         
@@ -80,7 +81,7 @@ class profile_set:
         
     def del_data(self, data):
         
-        msg = self._convert(data)
+        msg = self._convert(data).strip()
         
         if msg in self.data:
             self.data.remove(msg)
@@ -167,6 +168,11 @@ class profile_set:
     def get_pronouns(self):
         
         return self.pronouns
+    
+    def forget(self):
+        
+        os.remove("data/profiles/" + self.number + ".txt")
+        
     
     def save(self):
         

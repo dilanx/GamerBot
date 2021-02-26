@@ -1,4 +1,11 @@
+import random
 
+def r_msg(msgs):
+    
+    return msgs[random.randrange(len(msgs))]
+    
+    
+    
 
 def get_ping_id(content):
     

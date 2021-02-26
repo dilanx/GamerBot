@@ -2,17 +2,19 @@ import discord
 import sys
 import os
 from message_groups import message_set, profile_set, spd
-from utility import get_ping_id
+import utility
 from dotenv import load_dotenv
+import cexprtk
 
-VERSION = "1.1"
+VERSION = "1.2"
+dev = False
 
 load_dotenv()
 client = discord.Client()
 
 
 
-name = "gamer bot"
+name = "loagn"
 
 sets = []
     
@@ -23,6 +25,17 @@ class Basics:
     def __init__(self):
         
         self.set = [
+            message_set(self.tell_other,
+                    ["tell "],
+                    ["%0, here's a new message from %1: %2"]),
+            message_set(self.empty,
+                        ["how are you"],
+                        ["i'm doing alright, thanks!",
+                         "i'm doing well, thanks!",
+                         "i'm good, thanks!"
+                         "i'm doing alright.",
+                         "i'm doing well.",
+                         "i'm good."]),
             message_set(self.hello,
                     ["hello", "hi", "sup", "hey", "say hi to "],
                     ["hello %0. i am %1.",
@@ -31,20 +44,14 @@ class Basics:
                      "what's going on %0, %1 here.",
                      "oh hello there %0"]),
     
-            message_set(self.tell_other,
-                    ["tell "],
-                    ["%0, here's a new message from %1: %2"]),
+
     
             message_set(self.change_name,
                      ["call you "],
                      ["ok you can call me %0 now",
                       "lmao alright you can call me %0 now"]),
             
-            message_set(self.i_love_you,
-                        ["i love you", "ily", "uwu"],
-                        [":)"]),
-            
-            message_set(self.pog,
+            message_set(self.empty,
                         ["pog"],
                         ["PogChamp"])]
         
@@ -76,16 +83,7 @@ class Basics:
         
         return [person, message.author.display_name, split[2]]
     
-    def i_love_you(self, message):
-        
-        s = " " + message.content + " "
-        
-        if " ily " not in s and " i love you " not in s and " uwu " not in s:
-            return None
-        
-        return [message.author.display_name]
-    
-    def pog(self, message):
+    def empty(self, message):
         
         return [""]
 
@@ -130,7 +128,7 @@ class Ignore:
         
     def ignore_start(self, message):
         
-        person = get_ping_id(message.content)
+        person = utility.get_ping_id(message.content)
     
         if person is None:
             return [None, "idk who you want me to ignore :("]
@@ -144,7 +142,7 @@ class Ignore:
     
     def ignore_end(self, message):
             
-        person = get_ping_id(message.content)
+        person = utility.get_ping_id(message.content)
         
         if person is None:
             return [None, "idk who you want me to stop ignoring :("]
@@ -215,6 +213,11 @@ class Remember:
                         ["do you remember me"],
                         ["ofc i do! here's what i know about you, %0: %1",
                          "how could i forget! here's what i know about you, %0: %1"]),
+            message_set(self.forget_about_me,
+                        ["forget everything about me"],
+                        ["it was nice knowing you, %0! i'll forget everything about you as you requested",
+                         "well, ig all friendships come to an end. goodbye %0 :'(",
+                         "as you request, %0."]),
             message_set(self.talk_about_other,
                         ["tell me about "],
                         ["ooh okay. here's what i know about %0: %1",
@@ -225,6 +228,10 @@ class Remember:
                         ["okay %0, i'll remember that now.",
                          "cool! i'll remember that.",
                          "okay. i won't forget"]),
+            message_set(self.forget,
+                        ["forget ", "forget that "],
+                        ["forget what :)",
+                         "okay %0, i'll forget about that."]),
             message_set(self.what_is_my,
                         ["what is my ", "what are my "],
                         ["oh i know! %0",
@@ -331,6 +338,25 @@ class Remember:
         
         return [self._data[str(message.author.id)].get_name()]
     
+    def forget(self, message):
+        
+        if str(message.author.id) not in self._data:
+            
+            return [None, "oh no i don't know your name. you'll have to let me remember that before i can remember other stuff about you."]
+            
+        msg = message.content.partition("forget ")[2]
+        
+        if msg.startswith("that"): msg = msg.partition("that")[2].strip()
+        
+        msg = msg.replace(".", "").replace("!", "")
+            
+        ans = self._data[str(message.author.id)].del_data(msg)
+        
+        if not ans:
+            
+            return [None, "i can't forget something about you that i didn't know"]
+        
+        return [self._data[str(message.author.id)].get_name()]
     
     def what_is_my(self, message):
         
@@ -520,6 +546,52 @@ class Remember:
                 
         return [st]
     
+    def forget_about_me(self, message):
+        
+        if str(message.author.id) not in self._data:
+            
+            return [None, "i can't forget about someone i don't know xD"]
+        
+        name = self._data[str(message.author.id)].get_name()
+
+        self._data[str(message.author.id)].forget()
+        
+        del self._data[str(message.author.id)]
+        
+        return [name]
+    
+    
+class Mathematics:
+    
+    def __init__(self):
+        
+        self.set = [
+            message_set(self.evaluate_math,
+                        [" math: ",
+                         "evaluate the following mathematical expression: ",
+                         "do my math hw: ",
+                         "do my math homework: "],
+                        ["good thing i'm a genius. here's what i got: %0",
+                         "here's the answer: %0",
+                         "i have evaluated a solution: %0",
+                         "da math is done: %0"])
+            
+            ]
+        
+    def get_msgs(self):
+        return self.set
+    
+    def evaluate_math(self, message):
+        
+        msg = message.content.partition(": ")[2]
+        
+        try: ans = cexprtk.evaluate_expression(msg, {})
+        except:
+            return [None, "sorry i don't understand that math expression :("]
+        
+
+        return [str(ans)]
+    
 
 def add_message_set(init):
     
@@ -529,6 +601,7 @@ def add_message_set(init):
 basics = Basics()
 ignore = Ignore()
 remember = Remember()
+mathematics = Mathematics()
 
 whitelist = ["Blockhead7360#5000"]
 
@@ -543,6 +616,12 @@ async def on_message(message):
     
     if name in message.content:
         
+        if dev:
+            
+            if str(message.author) not in whitelist:
+                await message.channel.send("aww sorry i can't respond rn. i'm in developer mode.")
+                return
+            
         if message.content.startswith(name + " /"):
             
             cmd = message.content.partition(name + " /")[2]
@@ -611,7 +690,9 @@ async def on_ready():
 
 add_message_set(ignore.get_msgs())
 add_message_set(remember.get_msgs())
-add_message_set(basics.get_msgs())         
+add_message_set(mathematics.get_msgs())
+add_message_set(basics.get_msgs())  
+       
 
 # lmao no i'm not letting the bot token appear on github
 client.run(os.getenv("DISCORD-TOKEN"))
