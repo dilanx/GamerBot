@@ -14,7 +14,7 @@ client = discord.Client()
 
 
 
-name = "loagn"
+name = "gamer bot"
 
 sets = []
     
