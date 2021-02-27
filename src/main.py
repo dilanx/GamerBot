@@ -5,8 +5,11 @@ from message_groups import message_set, profile_set, spd
 import utility
 from dotenv import load_dotenv
 import cexprtk
+from bs4 import BeautifulSoup
+import urllib
+from datetime import datetime
 
-VERSION = "1.2"
+VERSION = "1.3 (extreme gamer)"
 dev = False
 
 load_dotenv()
@@ -43,9 +46,7 @@ class Basics:
                      "what's up %0. %1 here.",
                      "what's going on %0, %1 here.",
                      "oh hello there %0"]),
-    
-
-    
+            
             message_set(self.change_name,
                      ["call you "],
                      ["ok you can call me %0 now",
@@ -591,7 +592,132 @@ class Mathematics:
         
 
         return [str(ans)]
+
+class Courses:
     
+    def __init__(self):
+        
+        self.set = [
+            message_set(self.get_course_desc,
+                        [" course: "],
+                        ["ooh okay got it. here's a bit about %0 %1:\n\n**%2**\n%3",
+                         "i found the course description for %0 %1:\n\n**%2**\n%3",
+                         "here's info on %0 %1:\n\n**%2**\n%3"])
+            ]
+        
+        pass
+    
+    def get_msgs(self):
+        return self.set
+    
+    def get_course_desc(self, message):
+        
+        msg = message.content.partition("course: ")[2]
+        data = msg.split(" ")
+        
+        if len(data) < 2:
+            return [None, "hmm i don't understand your request. make sure you specify the course subject and number"]
+        
+        sq = msg.partition(" ")[2]
+                
+        data = self._convert(data[0], data[1])
+        
+        found = []
+        
+        exact = False
+        
+        try:
+            int(data[1].replace("-", ""))
+            exact = True
+            if "-" not in data[1]: data[1] += "-0"
+        except:
+            exact = False
+        
+        try:
+            page = urllib.request.urlopen("https://catalogs.northwestern.edu/undergraduate/courses-az/" + data[0] + "/index.html")
+            soup = BeautifulSoup(page, 'html.parser')
+            
+            blocks = soup.find_all("div", {"class": "courseblock"})
+            
+            for block in blocks:
+            
+                title = block.find_all("strong")
+                if title is None: continue
+                
+                title = title[0].text.replace("\xa0", " ")
+                
+                if exact:
+                    
+                    number = title.split(" ")[1]
+                    
+                    if number == data[1]:
+                    
+                        name = title.partition(number + " ")[2].replace("\xa0", "")
+                        
+                        desc = "*Unable to find the course description*"
+                        desc_find = block.find_all("p", {"class": "courseblockdesc"})
+                        
+                        if len(desc_find) > 0:
+                            desc = desc_find[0].text
+                        else:
+                            desc_find = block.find_all("span", {"class": "courseblockdesc"})
+                            if len(desc_find) > 0:
+                                desc = desc_find[0].text
+                        
+                        extra = ""
+                        extra_find = block.find_all("p", {"class": "courseblockextra"})
+                        
+                        if (len(extra_find) > 0):
+                            extra = extra_find[0].text
+                        else:
+                            extra_find = block.find_all("span", {"class": "courseblockextra"})
+                            if (len(extra_find) > 0):
+                                extra = extra_find[0].text
+                            
+                        desc = desc.replace("\xa0", " ").replace("\n", "")
+                        extra = " \n*" + extra.replace("\xa0", " ").replace("\n", "") + "*"
+                            
+                        desc += extra
+                        
+                        return [data[0], number, name, desc]
+             
+                else:
+                    
+                    if sq in title.lower():
+                        
+                        title_split = title.split(" ")
+                        subj_number = title_split[0] + " " + title_split[1]
+                        name = title.partition(subj_number + " ")[2]
+                        
+                        found.append("**" + subj_number.lower() + "** " + name)
+                        
+                    
+                            
+            if len(found) == 0: return [None, "i couldn't find the class you're looking for :("]
+            
+            st = "you didn't give me an exact course number to work with, but here's everything i found close to what you asked for:\n"
+            
+            for l in found:
+                st += "\n" + l
+                
+            st += "\n\nlet me know if you want a description for any of them by providing me with the course number when you search."
+            return [None, st]
+            
+        except Exception as e:
+            return [None, "hmm, i couldn't find what you're looking for."]
+        
+    def _convert(self, name, number):
+        
+        if name == "cs":
+            return ["comp_sci", number]
+        
+        if name == "ea":
+            return ["gen_eng", "205-" + str(number)]
+        
+        if name == "dtc":
+            return ["dsgn", "106-" + str(number)]
+        
+        return [name, number]
 
 def add_message_set(init):
     
@@ -602,6 +728,7 @@ basics = Basics()
 ignore = Ignore()
 remember = Remember()
 mathematics = Mathematics()
+courses = Courses()
 
 whitelist = ["Blockhead7360#5000"]
 
@@ -622,10 +749,11 @@ async def on_message(message):
                 await message.channel.send("aww sorry i can't respond rn. i'm in developer mode.")
                 return
             
+        history(message)
+            
         if message.content.startswith(name + " /"):
             
             cmd = message.content.partition(name + " /")[2]
-
             
             if cmd == "version":
                 await message.channel.send(VERSION)
@@ -687,11 +815,19 @@ async def on_ready():
     listening = discord.Activity(type=discord.ActivityType.listening, name="gamer music")
     await client.change_presence(activity=listening)
     
+def history(message):
+    
+    
+    
+    with open("data/history/" + str(message.author.id) + ".txt", "a") as writer:
+            writer.write("[" + datetime.now().strftime("%Y-%m-%d %H:%M:%S") \
+                         + "] [" + str(message.channel.id) + "] " + message.content + "\n")
 
 add_message_set(ignore.get_msgs())
+add_message_set(courses.get_msgs())
 add_message_set(remember.get_msgs())
 add_message_set(mathematics.get_msgs())
-add_message_set(basics.get_msgs())  
+add_message_set(basics.get_msgs()) 
        
 
 # lmao no i'm not letting the bot token appear on github
