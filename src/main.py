@@ -28,6 +28,9 @@ class Basics:
     def __init__(self):
         
         self.set = [
+            message_set(self.empty,
+                        ["counter 34 bot"],
+                        ["34!gotohell"]),
             message_set(self.tell_other,
                     ["tell "],
                     ["%0, here's a new message from %1: %2"]),
