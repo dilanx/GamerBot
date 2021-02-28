@@ -252,7 +252,7 @@ class Remember:
                         ["forget what :)",
                          "okay %0, i'll forget about that."]),
             message_set(self.what_is_my,
-                        ["what is my ", "what are my "],
+                        ["what is my ", "what are my ", "whats my ", "what's my "],
                         ["oh i know! %0",
                          "here's what i know: %0"]),
             message_set(self.what_do_i,
@@ -260,7 +260,7 @@ class Remember:
                         ["oh i know! %0",
                          "here's what i know: %0"]),
             message_set(self.what_is_other,
-                        ["what is ", "what are "],
+                        ["what is ", "what are ", "whats ", "what's "],
                         ["ooh i know this about %0: %1",
                          "%0 told me this earlier: %1",
                          "this is what i know about %0: %1"]),
@@ -419,13 +419,21 @@ class Remember:
     
     def what_is_other(self, message):
         
-        if "what is " in message.content:
+        content = message.content.replace("whats", "what is ").replace("what's", "what is ")
+        
+        if "what is " in content:
             ind = "what is "
+            
+            possible_math = mathematics.evaluate_math(content)
+            
+            if possible_math[0] is not None:
+                return [None, "here's what i got: " + possible_math[0]]
+            
         else:
             ind = "what are "
             
-        first_part = message.content.split(ind)[1]
-        if "'s " not in message.content: return None
+        first_part = content.split(ind)[1]
+        if "'s " not in content: return None
         who = first_part.split("'s ")[0]
         msg = first_part.split("'s ")[1].replace("?", "")
         
@@ -442,8 +450,9 @@ class Remember:
         
     def _what_other(self, who, msg):
         
+        who = who.strip()
+        
         for d in self._data.values():
-            
             if d.get_name() == who:
                 
                 ans = d.find(msg, False)
@@ -629,7 +638,15 @@ class Mathematics:
     
     def evaluate_math(self, message):
         
-        msg = message.content.partition(": ")[2]
+        if type(message) == str:
+            content = message
+        else:
+            content = message.content
+        
+        if "what is " in content:
+            msg = content.partition("what is ")[2]
+        else:
+            msg = content.partition(": ")[2]
         
         try: ans = cexprtk.evaluate_expression(msg, {})
         except:
