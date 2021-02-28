@@ -35,4 +35,5 @@ It even knows synonyms and antonyms for words, so you could be like `gamer bot w
 Let me know if you want to add something to gamer bot and I'll show you how it's set up. If you know some Python and wanna make cool stuff this is fun. Also let me know if you wanna see how your save data looks and I can show you what gamer bot knows about you.
 
 Code: https://github.com/Blockhead7360/GamerBot
+
 Changelog: http://docs.blockhead7360.com/changelogs/swwa-20010
