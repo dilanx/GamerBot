@@ -8,10 +8,13 @@ Hello okay I've never made anything with Python before so I thought I'd learn it
 
 Also most of the code is in one file because when I tried putting them in multiple files I kept getting circular dependency errors and I didn't really know nor have the time to learn how to fix that so whatever. The code is still structured in a way that I can separate out into separate files later on.
 
+## Changelog
+See all of GamerBot's pog champ features here: http://docs.blockhead7360.com/changelogs/swwa-20010
+
 ---
 
 gamer bot pog uwu :)
 
 Made Feb 23, 2021
 
-I wanna work on some machine learning and AI stuff with this bc that sounds fun. So I should probably tell you that every time you send a message containing gamer bot's name in a channel it can access, it saves it to a file on my computer, noting your user id, channel id, and time as well :). It would be really cool if it could behave naturally like humans; for example, remembering stuff
+I wanna work on some machine learning and AI stuff with this bc that sounds fun. So I should probably tell you that every time you send a message containing gamer bot's name in a channel it can access, it saves it to a file on my computer, noting your user id, channel id, and time as well :). This means if you sent a message to gamer bot but deleted it, I'd technically still be able to see it. If you don't want your messages to it saved let me know but like it's fine bro. Also, tt would be really cool if it could behave naturally like humans; for example, changing its mood depending on how people talk to it, and then forgetting about old feelings over time (hence the saving of messages and timestamps).
