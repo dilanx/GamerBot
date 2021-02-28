@@ -32,7 +32,7 @@ Gamer bot also has a degree in English so you can ask it what any word means. As
 It even knows synonyms and antonyms for words, so you could be like `gamer bot what's another word for hello` or `gamer bot what's the opposite of stop` and it'll tell you everything it knows.
 
 ### Bye
-Let me know if you want to add something to gamer bot and I'll show you how it's set up. If you know some Python and wanna make cool stuff this is fun. Also let me know if you wanna see how your save data looks and I can show you what gamer bot knows about you.
+Let me know if you want to add something to gamer bot and I'll show you how it's set up. If you know some Python and wanna make cool stuff this is fun. Also let me know if you wanna see how your save data looks and I can show you what gamer bot knows about you. This is really fun so I'm gonna add a ton of random stuff over time.
 
 Code: https://github.com/Blockhead7360/GamerBot
 
