@@ -1,5 +1,4 @@
 import discord
-import sys
 import os
 from message_groups import message_set, profile_set, spd
 import utility
@@ -158,16 +157,16 @@ class Ignore:
         
         
     
-    def is_ignored(self, id):
-        return id in self.ignore
+    def is_ignored(self, user):
+        return user in self.ignore
     
-    def add_ignore(self, id):
-        self.ignore.append(id)
+    def add_ignore(self, user):
+        self.ignore.append(user)
         self._save()
         
-    def del_ignore(self, id):
-        if id in self.ignore:
-            self.ignore.remove(id)
+    def del_ignore(self, user):
+        if user in self.ignore:
+            self.ignore.remove(user)
             self._save()
             
     def _save(self):
