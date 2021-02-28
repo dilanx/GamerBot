@@ -19,9 +19,27 @@ class message_set:
         
         for x in self.sig_array:
             
-            if x in message:
+            
+            
+            if "&" in x:                
                 
-                return True
+                words = x.split("&")
+                
+                yes = True
+                
+                for word in words:
+                    
+                    if word not in message:
+                        yes = False
+                        break
+                     
+                if yes: return True
+                
+            else:
+                
+                if x in message:
+                    
+                    return True
             
         return False    
     

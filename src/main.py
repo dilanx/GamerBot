@@ -8,12 +8,17 @@ import cexprtk
 from bs4 import BeautifulSoup
 import urllib
 from datetime import datetime
+import json
 
-VERSION = "1.3 (extreme gamer)"
+VERSION = "1.4 (extreme gamer epic)"
 dev = False
 
 load_dotenv()
 client = discord.Client()
+
+key_discordtoken = os.getenv("DISCORD-TOKEN")
+key_merriamwebsterdictkey = os.getenv("MW-DICT-KEY")
+key_merriamwebstertheskey = os.getenv("MW-THES-KEY")
 
 
 
@@ -35,20 +40,20 @@ class Basics:
                     ["tell "],
                     ["%0, here's a new message from %1: %2"]),
             message_set(self.empty,
+                        ["proud of you"],
+                        ["aww thank you :blush:",
+                         "that means a lot :blush:"]),
+            message_set(self.empty,
+                        ["how are you made"],
+                        ["check it out!\ncode: https://github.com/blockhead7360/gamerbot\nupdate log: http://docs.blockhead7360.com/changelogs/swwa-20010"]),
+            message_set(self.empty,
                         ["how are you"],
                         ["i'm doing alright, thanks!",
                          "i'm doing well, thanks!",
-                         "i'm good, thanks!"
+                         "i'm good, thanks!",
                          "i'm doing alright.",
                          "i'm doing well.",
                          "i'm good."]),
-            message_set(self.hello,
-                    ["hello", "hi", "sup", "hey", "say hi to "],
-                    ["hello %0. i am %1.",
-                     "umm hi %0",
-                     "what's up %0. %1 here.",
-                     "what's going on %0, %1 here.",
-                     "oh hello there %0"]),
             
             message_set(self.change_name,
                      ["call you "],
@@ -61,13 +66,6 @@ class Basics:
         
     def get_msgs(self):
         return self.set
-        
-    def hello(self, message):
-        
-        to = message.author.display_name
-        if "say hi to " in message.content:
-            to = message.content.partition("say hi to ")[2]
-        return [to, name]
 
     def change_name(self, message):
         
@@ -193,6 +191,19 @@ class Remember:
         self._data = {}
         self._load()
         
+        self.set2 = [
+            message_set(self.hello,
+                    ["hello", "hi", "sup", "hey", "say hi to "],
+                    ["umm hi %0",
+                     "oh hello there %0",
+                     "hi %0!!",
+                     "hello %0!!",
+                     "hey %0! how are you?",
+                     "hi %0! how are you doing?",
+                     "hello %0. how are you?"])
+            
+            ]
+        
         self.set = [
             message_set(self.all_remember,
                         ["who all do you remember", "who do you remember", "who all do you know"],
@@ -200,7 +211,7 @@ class Remember:
                          "i remember these people: %0 i'd love to meet more people though (just tell me to remember your name)!",
                          "here are all the people i know: %0 i'd love to meet more people (just tell me to remember your name)!"]),
             message_set(self.new,
-                        ["remember my name is ", "remember that my name is "],
+                        ["remember my name is ", "remember that my name is ", "my name is "],
                         ["okay %0! i'll remember you.",
                          "nice to meet you %0! i'll remember you now."]),
             message_set(self.pronouns,
@@ -213,6 +224,11 @@ class Remember:
             message_set(self.talk_about_me,
                         ["tell me about myself"],
                         ["ofc! here's what i know about you, %0: %1"]),
+            message_set(self.talk_about_you,
+                        ["tell me about yourself"],
+                        ["there isn't really to say much about me, %0. i'm a discord bot lmaoo. i do like talking to you though :)",
+                         "hmm tbh idrk. i'm a discord bot who likes talking to people, especially you %0 :)",
+                         "i like talking to ppl, like you, %0, as well as giving them helpful information. other than that i'm just a little discord bot :)"]),
             message_set(self.talk_about_me,
                         ["do you remember me"],
                         ["ofc i do! here's what i know about you, %0: %1",
@@ -285,6 +301,22 @@ class Remember:
             
     def get_msgs(self):
         return self.set
+    
+    def get_msgs2(self):
+        return self.set2
+    
+    def hello(self, message):
+        
+        global name
+        
+        if str(message.author.id) not in self._data:
+            
+            return [None, "oh hello there! i'm " + name + "! i'm not sure who you are but you should tell me your name so i remember."]
+        
+        your_name = self._data[str(message.author.id)].get_name()
+        
+        return [your_name]
+        
     
     def new(self, message):
         
@@ -377,7 +409,7 @@ class Remember:
             return [None, "i'm afraid that i don't know who you are. you'll have to let me remember your name first."]
         
         st = message.content.partition(split_type)[2]
-        if (st.strip() == "name"): return ["your name is " + self._data[str(message.author.id)].get_name()]
+        if (st.strip() in ["name", "name?"]): return ["your name is " + self._data[str(message.author.id)].get_name()]
         else: info = self._data[str(message.author.id)].find(message.content.partition(split_type)[2], True)
         
         if info is None:
@@ -449,6 +481,17 @@ class Remember:
                 st += ", " + lines[i]
         
         return [info.get_name(), st]
+    
+    def talk_about_you(self, message):
+        
+        
+        if str(message.author.id) not in self._data:
+            
+            return [None, "you first! what's your name?"]
+        
+        your_name = self._data[str(message.author.id)].get_name()
+        
+        return [your_name]
     
     def talk_about_other(self, message):
         
@@ -596,7 +639,7 @@ class Mathematics:
 
         return [str(ans)]
 
-class Courses:
+class Northwestern:
     
     def __init__(self):
         
@@ -605,13 +648,67 @@ class Courses:
                         [" course: "],
                         ["ooh okay got it. here's a bit about %0 %1:\n\n**%2**\n%3",
                          "i found the course description for %0 %1:\n\n**%2**\n%3",
-                         "here's info on %0 %1:\n\n**%2**\n%3"])
+                         "here's info on %0 %1:\n\n**%2**\n%3"]),
+            message_set(self.get_covid_info,
+                        ["covid like",
+                         "covid is like",
+                         "covid cases",
+                         "covid-19 like",
+                         "covid-19 is like",
+                         "covid-19 cases",
+                         "covid positivity rate",
+                         "coronavirus like",
+                         "coronavirus is like",
+                         "coronavirus cases",
+                         "coronavirus positivity rate"],
+                        ["hmm, it's %0. the positivity rate atm is %1, with %2 positive cases out of %3 in the past 7 days. " + 
+                            "since august 20, there have been %5 tests, %6 of which were positive.",
+                        "ooh good question. just checked and it's %0 rn. the positivity rate is %1, with %2 positive cases out of %3 in the past week. " +
+                            "since august 20, there have been %5 tests, %6 of which were positive.",
+                        "well, it's %0. the positivity rate is %1, with %2 positive cases out of %3 in the past 7 days. " +
+                            "since august 20, there have been %5 tests, %6 of which were positive."])
             ]
         
         pass
     
     def get_msgs(self):
         return self.set
+    
+    def get_covid_info(self, message):
+        
+        try:
+            
+            page = urllib.request.urlopen("https://www.northwestern.edu/coronavirus-covid-19-updates/university-status/dashboard/index.html")
+            soup = BeautifulSoup(page, 'html.parser')
+            
+            blocks = soup.find_all("div", {"class": "stats-callout"})[0].find_all("div")
+            
+            info = []
+            
+            for block in blocks:
+                
+                data = block.find_all("div", {"class": "big"})
+                
+                if len(data) == 0: continue
+                
+                info.append(data[0].text)
+            
+            pos = float(info[0].replace("%", ""))
+            
+            if pos <= 1:
+                msg = "not too bad"
+            elif pos <= 5 and pos > 1:
+                msg = "not good"
+            else:
+                msg = "pretty bad"
+                
+            info.insert(0, msg)
+            
+            return info
+            
+        except:
+            return [None, "for some reason i can't get the covid-19 info, sorry :("]
+        
     
     def get_course_desc(self, message):
         
@@ -706,7 +803,7 @@ class Courses:
             st += "\n\nlet me know if you want a description for any of them by providing me with the course number when you search."
             return [None, st]
             
-        except Exception as e:
+        except:
             return [None, "hmm, i couldn't find what you're looking for."]
         
     def _convert(self, name, number):
@@ -721,6 +818,166 @@ class Courses:
             return ["dsgn", "106-" + str(number)]
         
         return [name, number]
+    
+class Definitions:
+    
+    def __init__(self):
+        
+        self.set = [
+            message_set(self.get_definition,
+                        ["what does & mean"],
+                        ["here's what i found for %0 (%1):\n%2"]),
+            message_set(self.get_synonyms,
+                        ["a synonym for ",
+                         "another word for "],
+                        ["ooh here are some synonyms for %0:\n%1",
+                         "i found some other words for %0:\n%1"]),
+            message_set(self.get_antonyms,
+                        ["the opposite of "],
+                        ["here are some antonyms for %0:\n%1",
+                         "i found these antonyms for %0:\n%1"])
+            ]
+        
+    def get_msgs(self):
+        return self.set
+    
+    def get_synonyms(self, message):
+        
+        text = message.content.partition(" for ")[2].replace("?", "")
+        word = text.replace(" ", "%20")
+        
+        with urllib.request.urlopen("https://www.dictionaryapi.com/api/v3/references/thesaurus/json/" + word + "?key=" + key_merriamwebstertheskey) as url:
+            data = json.loads(url.read().decode())
+        
+        if len(data) == 0:
+            return [None, "i'm sorry, i couldn't find any synonyms for that word."]
+        
+        if type(data[0]) == dict:
+            syns = data[0]["meta"]["syns"]
+            
+            if len(syns) == 0:
+                return [None, "i couldn't find any synonyms for that word."]
+            
+            syn = ""
+            
+            if len(syns) == 1:
+                
+                syns = syns[0]
+                
+                syn = "\n" + syns[0]
+                
+                for i in range(len(syns)):
+                
+                    syn += ", " + syns[i]
+                
+            else:
+                
+                for x in range(len(syns)):
+                    
+                    syn += "\n" + str(x + 1) + ". " + syns[x][0]
+                    
+                    
+                    for i in range(len(syns[x])):
+                
+                        syn += ", " + syns[x][i]
+            
+            return [text, syn]
+        
+        st = data[0]
+        
+        for i in range(1, len(data)):
+            st += ", " + data[i]
+        
+        return [None, "i couldn't find that word specifically, but here are some words that are close: " + st]
+        
+    def get_antonyms(self, message):
+        
+        text = message.content.partition(" of ")[2].replace("?", "")
+        word = text.replace(" ", "%20")
+        
+        with urllib.request.urlopen("https://www.dictionaryapi.com/api/v3/references/thesaurus/json/" + word + "?key=" + key_merriamwebstertheskey) as url:
+            data = json.loads(url.read().decode())
+        
+        if len(data) == 0:
+            return [None, "i'm sorry, i couldn't find any antonyms for that word."]
+        
+        if type(data[0]) == dict:
+            ants = data[0]["meta"]["ants"]
+            
+            ant = ""
+            
+            if len(ants) == 1:
+                
+                ants = ants[0]
+                
+                ant = "\n" + ants[0]
+                
+                for i in range(len(ants)):
+                
+                    ant += ", " + ants[i]
+                
+            else:
+                
+                for x in range(len(ants)):
+                    
+                    ant += "\n" + str(x + 1) + ". " + ants[x][0]
+                    
+                    
+                    for i in range(len(ants[x])):
+                
+                        ant += ", " + ants[x][i]
+            
+            return [text, ant]
+        
+        st = data[0]
+        
+        for i in range(1, len(data)):
+            st += ", " + data[i]
+        
+        return [None, "i couldn't find that word specifically, but here are some words that are close: " + st]
+        
+    def get_definition(self, message):
+        
+        text = message.content.partition("does ")[2].partition(" mean")[0]
+        word = text.replace(" ", "%20")
+        
+        with urllib.request.urlopen("https://www.dictionaryapi.com/api/v3/references/collegiate/json/" + word + "?key=" + key_merriamwebsterdictkey) as url:
+            data = json.loads(url.read().decode())
+        
+        
+        if len(data) == 0:
+            return [None, "i'm sorry, i couldn't find what that word means!"]
+        
+        if type(data[0]) == dict:
+            word_type = data[0]["fl"]
+            word_defs = data[0]["shortdef"]
+            
+            if len(word_defs) == 0:
+                return [None, "i couldn't find a good definition for that word."]
+            
+            word_def = ""
+            
+            if len(word_defs) == 1:
+                word_def = "\n" + word_defs[0]
+            else:
+                
+                for i in range(len(word_defs)):
+                    
+                    word_def += "\n" + str(i + 1) + ". " + word_defs[i]
+            
+            
+            return [text, word_type, word_def]
+        
+        st = data[0]
+        
+        for i in range(1, len(data)):
+            st += ", " + data[i]
+        
+        return [None, "i couldn't find that word specifically, but here are some words that are close: " + st]
+            
+            
+        
+    
 
 def add_message_set(init):
     
@@ -731,7 +988,8 @@ basics = Basics()
 ignore = Ignore()
 remember = Remember()
 mathematics = Mathematics()
-courses = Courses()
+northwestern = Northwestern()
+definitions = Definitions()
 
 whitelist = ["Blockhead7360#5000"]
 
@@ -827,13 +1085,15 @@ def history(message):
                          + "] [" + str(message.channel.id) + "] " + message.content + "\n")
 
 add_message_set(ignore.get_msgs())
-add_message_set(courses.get_msgs())
+add_message_set(definitions.get_msgs())
+add_message_set(northwestern.get_msgs())
 add_message_set(remember.get_msgs())
 add_message_set(mathematics.get_msgs())
-add_message_set(basics.get_msgs()) 
+add_message_set(basics.get_msgs())
+add_message_set(remember.get_msgs2())
        
 
 # lmao no i'm not letting the bot token appear on github
-client.run(os.getenv("DISCORD-TOKEN"))
+client.run(key_discordtoken)
 
 
