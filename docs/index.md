@@ -4,8 +4,10 @@ I bet you're wondering what gamer bot can do. Look at this.
 ### Overview
 Gamer bot can only read messages that contain its name (`gamer bot` by default) in it.
 
-### Greetings
+### Greetings and Random Stuff
 You can say hello/hey/hi/etc to gamer bot, and it'll say hi back. You can also ask it how it is, etc.
+
+You can also be like `gamer bot tell _____: _____` and it'll just repeat what's in the second blank to the person(s) you specified in the first blank.
 
 ### Memory
 You can tell gamer bot what your name is and it'll remember that forever. You can then tell it to remember stuff about you, something like `gamer bot remember that i like food`.
@@ -34,6 +36,6 @@ It even knows synonyms and antonyms for words, so you could be like `gamer bot w
 ### Bye
 Let me know if you want to add something to gamer bot and I'll show you how it's set up. If you know some Python and wanna make cool stuff this is fun. Also let me know if you wanna see how your save data looks and I can show you what gamer bot knows about you. This is really fun so I'm gonna add a ton of random stuff over time.
 
-Code: https://github.com/Blockhead7360/GamerBot
+Code: [https://github.com/Blockhead7360/GamerBot](https://github.com/Blockhead7360/GamerBot)
 
-Changelog: http://docs.blockhead7360.com/changelogs/swwa-20010
+Changelog: [http://docs.blockhead7360.com/changelogs/swwa-20010](http://docs.blockhead7360.com/changelogs/swwa-20010)
