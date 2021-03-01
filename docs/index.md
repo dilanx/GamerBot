@@ -24,7 +24,7 @@ Gamer bot has a degree in mathematics so you can ask it to evaluate any mathemat
 ### Northwestern
 Gamer bot has a side job at Northwestern University so it knows about every single Northwestern course, as well as all the COVID-19 data on campus.
 
-Ask it something like `gamer bot tell me about this course: cs 211` or `gamer bot find the description for this course: math 228-1` and it's got you covered with the course description and prereqs. If you remember part of the name rather than the number, you could even be like `gamer bot tell me about this course: cs fundamentals` and it'll search that subject's courses' names for what you want.
+Ask it something like `gamer bot tell me about this course: cs 211` or `gamer bot find the description for this course: math 228-1` and it's got you covered with the course description and prereqs. If you remember part of the name rather than the number, you could even be like `gamer bot tell me about this course: cs fundamentals` and it'll search that subject's courses' names for what you want. Those statements are just examples. The idea is that you can ask it in multiple ways as long as it's clear what you're trying to ask. Like you could say `gamer bot search for this course: cs 110` or in a bunch of other ways as well.
 
 If you wanna know whether you're gonna die if you go outside just ask it something like `gamer bot what's covid like on campus` or `gamer bot what are the covid cases like on campus` and it'll tell you.
 
