@@ -19,6 +19,8 @@ key_discordtoken = os.getenv("DISCORD-TOKEN")
 key_merriamwebsterdictkey = os.getenv("MW-DICT-KEY")
 key_merriamwebstertheskey = os.getenv("MW-THES-KEY")
 
+link_help = "http://docs.blockhead7360.com/GamerBot"
+
 
 
 name = "gamer bot"
@@ -33,6 +35,10 @@ class Basics:
         
         self.set = [
             message_set(self.empty,
+                        ["tell me a joke"],
+                        ["if only i was funny :(",
+                         "aww i don't know any good ones."]),
+            message_set(self.empty,
                         ["counter 34 bot"],
                         ["34!gotohell"]),
             message_set(self.tell_other,
@@ -43,7 +49,7 @@ class Basics:
                         ["aww thank you :blush:",
                          "that means a lot :blush:"]),
             message_set(self.empty,
-                        ["how are you made"],
+                        ["how are you made", "how were you made"],
                         ["check it out!\ncode: https://github.com/blockhead7360/gamerbot\nupdate log: http://docs.blockhead7360.com/changelogs/swwa-20010"]),
             message_set(self.empty,
                         ["how are you"],
@@ -53,15 +59,20 @@ class Basics:
                          "i'm doing alright.",
                          "i'm doing well.",
                          "i'm good."]),
-            
             message_set(self.change_name,
                      ["call you "],
                      ["ok you can call me %0 now",
                       "lmao alright you can call me %0 now"]),
-            
             message_set(self.empty,
                         ["pog"],
-                        ["PogChamp"])]
+                        ["PogChamp"]),
+            message_set(self.empty,
+                        ["help", "what can you do"],
+                        ["i can finally help you: " + link_help,
+                         "here's a link: " + link_help,
+                         "take this: " + link_help,
+                         "here you go: " + link_help])
+            ]
         
     def get_msgs(self):
         return self.set
@@ -268,7 +279,7 @@ class Remember:
                         ["what does "],
                         ["ooh i know this about %0: %1",
                          "%0 told me this earlier: %1",
-                         "this is what i know about %0: %1"]),
+                         "this is what i know about %0: %1"])
             ]
         
     def _load(self):
@@ -615,6 +626,22 @@ class Remember:
         
         return [name]
     
+class Interactions:
+    
+    def __init__(self):
+        
+        self.set = [
+            
+            ]
+        
+    def why_do_you(self, message):
+        
+        msg = message.replace(name, "").replace("why do you", "").strip()
+        
+        # TODO stuff
+        
+        
+        
     
 class Mathematics:
     
