@@ -9,7 +9,7 @@ import urllib
 from datetime import datetime
 import json
 
-VERSION = "1.4 (extreme gamer epic)"
+VERSION = "1.5 (absolutely insane)"
 dev = False
 
 load_dotenv()
@@ -29,75 +29,6 @@ sets = []
     
     #add_message_set(basics.init())
 #    add_message_set(ignore.init())
-class Basics:
-    
-    def __init__(self):
-        
-        self.set = [
-            message_set(self.empty,
-                        ["tell me a joke"],
-                        ["if only i was funny :(",
-                         "aww i don't know any good ones."]),
-            message_set(self.empty,
-                        ["counter 34 bot"],
-                        ["34!gotohell"]),
-            message_set(self.tell_other,
-                    ["tell "],
-                    ["%0, here's a new message from %1: %2"]),
-            message_set(self.empty,
-                        ["proud of you"],
-                        ["aww thank you :blush:",
-                         "that means a lot :blush:"]),
-            message_set(self.empty,
-                        ["how are you made", "how were you made"],
-                        ["check it out!\ncode: https://github.com/blockhead7360/gamerbot\nupdate log: http://docs.blockhead7360.com/changelogs/swwa-20010"]),
-            message_set(self.empty,
-                        ["how are you"],
-                        ["i'm doing alright, thanks!",
-                         "i'm doing well, thanks!",
-                         "i'm good, thanks!",
-                         "i'm doing alright.",
-                         "i'm doing well.",
-                         "i'm good."]),
-            message_set(self.change_name,
-                     ["call you "],
-                     ["ok you can call me %0 now",
-                      "lmao alright you can call me %0 now"]),
-            message_set(self.empty,
-                        ["pog"],
-                        ["PogChamp"]),
-            message_set(self.empty,
-                        ["help", "what can you do"],
-                        ["i can finally help you: " + link_help,
-                         "here's a link: " + link_help,
-                         "take this: " + link_help,
-                         "here you go: " + link_help])
-            ]
-        
-    def get_msgs(self):
-        return self.set
-
-    def change_name(self, message):
-        
-        new_name = message.content.partition("you ")[2]
-        
-        global name
-        
-        name = new_name
-        
-        return [name]
-    
-    def tell_other(self, message):
-        
-        split = message.content.partition(":")
-        
-        person = split[0].partition("tell ")[2]
-        
-        return [person, message.author.display_name, split[2]]
-    
-    def empty(self, message):
-        
-        return [""]
 
 class Ignore:
     
@@ -314,6 +245,11 @@ class Remember:
     
     def get_msgs2(self):
         return self.set2
+    
+    def get_profile(self, sender_id):
+        
+        if str(sender_id) not in self._data: return None
+        else: return self._data[str(sender_id)]
     
     def hello(self, message):
         
@@ -625,23 +561,106 @@ class Remember:
         del self._data[str(message.author.id)]
         
         return [name]
-    
+
 class Interactions:
     
     def __init__(self):
         
         self.set = [
             
+            message_set(self.empty,
+                        ["tell me a joke"],
+                        ["if only i was funny :(",
+                         "aww i don't know any good ones."]),
+            message_set(self.empty,
+                        ["love you", "proud of you"],
+                        ["aww thank you :blush:",
+                         "that means a lot :blush:"]),
+            message_set(self.empty,
+                        ["hate you", "screw you"],
+                        ["wow. :pensive:",
+                         "that isn't nice :pensive:",
+                         "i'm trying my best :cry:"]),
+            message_set(self.empty,
+                        ["how are you made", "how were you made"],
+                        ["check it out!\ncode: https://github.com/blockhead7360/gamerbot\nupdate log: http://docs.blockhead7360.com/changelogs/swwa-20010"]),
+            message_set(self.empty,
+                        ["how are you"],
+                        ["i'm doing alright, thanks!",
+                         "i'm doing well, thanks!",
+                         "i'm good, thanks!",
+                         "i'm doing alright.",
+                         "i'm doing well.",
+                         "i'm good."]),
+            message_set(self.empty,
+                        ["pog"],
+                        ["PogChamp"]),
+            message_set(self.empty,
+                        ["help", "what can you do"],
+                        ["i can finally help you: " + link_help,
+                         "here's a link: " + link_help,
+                         "take this: " + link_help,
+                         "here you go: " + link_help]),
+            message_set(self.why_do_you,
+                        ["why do you "],
+                        ["%0", "%1", "%2"]),
+            message_set(self.what_do_you,
+                        ["what do you "],
+                        ["%0", "%1", "%2"])
+            
             ]
+        
+    def get_msgs(self):
+        return self.set
+    
+    def empty(self, message):
+        
+        return [""]
+    
+    def what_do_you(self, message):
+        
+        msg = message.content.replace(name, "").replace("what do you", "").strip()
+        
+        user = remember.get_profile(message.author.id)
+        
+        if "like to do" in msg:
+            return ["i mean mainly just talk to people ig",
+                    "i like to talk to you!",
+                    "i like to do bot things."]
+            
+        if "like" in msg:
+            return [None, "uhh idk"]
+        
+        if "think of me" in msg:
+            
+            if user is None:
+                return [None, "i don't really have an opinion of you because i don't know you. you should tell me your name!"]
+            
+            return [None, "feature not complete"]
+        
+        return None
+            
         
     def why_do_you(self, message):
         
-        msg = message.replace(name, "").replace("why do you", "").strip()
+        msg = message.content.replace(name, "").replace("why do you", "").strip()
         
-        # TODO stuff
+        user = remember.get_profile(message.author.id)
         
+        if user is None:
+            return [None, "uhh i don't know you. i'd like to though, so you should tell me your name!"]
         
+        if "hate me" in msg:
+            return ["nooo i don't hate you, " + user.get_name() + "!",
+                    "what makes you think i hate you, " + user.get_name() + "??",
+                    "no no i don't hate you " + user.get_name() + "..."]
         
+        if "love me" in msg or "like me" in msg:
+            return ["because you're great, " + user.get_name() + "!",
+                    "because you're pretty cool, " + user.get_name() + "!",
+                    "you're just that cool, " + user.get_name() + "!"]
+        
+        return None
     
 class Mathematics:
     
@@ -688,7 +707,7 @@ class Northwestern:
         
         self.set = [
             message_set(self.get_course_desc,
-                        [" course: "],
+                        [" course: ", " the & course"],
                         ["ooh okay got it. here's a bit about %0 %1:\n\n**%2**\n%3",
                          "i found the course description for %0 %1:\n\n**%2**\n%3",
                          "here's info on %0 %1:\n\n**%2**\n%3"]),
@@ -755,7 +774,10 @@ class Northwestern:
     
     def get_course_desc(self, message):
         
-        msg = message.content.partition("course: ")[2]
+        if "course: " in message.content:
+            msg = message.content.partition("course: ")[2]
+        else:
+            msg = message.content.partition("the ")[2].partition(" course")[0]
         data = msg.split(" ")
         
         if len(data) < 2:
@@ -883,6 +905,7 @@ class Definitions:
         
     def get_msgs(self):
         return self.set
+        
     
     def get_synonyms(self, message):
         
@@ -1027,9 +1050,9 @@ def add_message_set(init):
     for i in init:
         sets.append(i)
 
-basics = Basics()
 ignore = Ignore()
 remember = Remember()
+interactions = Interactions()
 mathematics = Mathematics()
 northwestern = Northwestern()
 definitions = Definitions()
@@ -1097,7 +1120,10 @@ async def on_message(message):
             
             if s.should_activate(message.content):
                 val = s.call_function(message)
-                if val is not None:
+                
+                if val is None: continue
+                
+                else:
                     
                     if val[0] is None:
                         
@@ -1132,9 +1158,8 @@ add_message_set(definitions.get_msgs())
 add_message_set(northwestern.get_msgs())
 add_message_set(remember.get_msgs())
 add_message_set(mathematics.get_msgs())
-add_message_set(basics.get_msgs())
+add_message_set(interactions.get_msgs())
 add_message_set(remember.get_msgs2())
-       
 
 # lmao no i'm not letting the bot token appear on github
 client.run(key_discordtoken)

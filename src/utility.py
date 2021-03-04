@@ -4,6 +4,12 @@ def r_msg(msgs):
     
     return msgs[random.randrange(len(msgs))]
     
+def in_msg(msg, arr):
+    
+    for i in arr:
+        if i in msg: return True
+        
+    return False
     
     
 
