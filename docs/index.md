@@ -7,8 +7,6 @@ Gamer bot can only read messages that contain its name (`gamer bot` by default) 
 ### Greetings and Random Stuff
 You can say hello/hey/hi/etc to gamer bot, and it'll say hi back. You can also ask it how it is, etc.
 
-You can also be like `gamer bot tell _____: _____` and it'll just repeat what's in the second blank to the person(s) you specified in the first blank.
-
 ### Memory
 You can tell gamer bot what your name is and it'll remember that forever. You can then tell it to remember stuff about you, something like `gamer bot remember that i like food`.
 
