@@ -6,10 +6,10 @@ from dotenv import load_dotenv
 import cexprtk
 from bs4 import BeautifulSoup
 import urllib
-from datetime import datetime
+from datetime import datetime, timedelta
 import json
 
-VERSION = "1.5 (absolutely insane)"
+VERSION = "1.6 (absolutely insane)"
 dev = False
 
 load_dotenv()
@@ -18,6 +18,7 @@ client = discord.Client()
 key_discordtoken = os.getenv("DISCORD-TOKEN")
 key_merriamwebsterdictkey = os.getenv("MW-DICT-KEY")
 key_merriamwebstertheskey = os.getenv("MW-THES-KEY")
+key_polygonkey = os.getenv("POLYGON-KEY")
 
 link_help = "http://docs.blockhead7360.com/GamerBot"
 
@@ -156,14 +157,14 @@ class Remember:
                         ["okay %0! i'll remember you.",
                          "nice to meet you %0! i'll remember you now."]),
             message_set(self.pronouns,
-                        ["remember my pronouns are ", "remember that my pronouns are "],
+                        ["remember my pronouns are ", "remember that my pronouns are ", "my pronouns are "],
                         ["thanks! i know how to refer to you now.",
                          "okay got it."]),
             message_set(self.talk_about_all,
                         ["tell me about everyone"],
                         ["%0"]),
             message_set(self.talk_about_me,
-                        ["tell me about myself"],
+                        ["tell me about myself", "what do you know about me"],
                         ["ofc! here's what i know about you, %0: %1"]),
             message_set(self.talk_about_you,
                         ["tell me about yourself"],
@@ -194,7 +195,7 @@ class Remember:
                         ["forget what :)",
                          "okay %0, i'll forget about that."]),
             message_set(self.what_is_my,
-                        ["what is my ", "what are my ", "whats my ", "what's my "],
+                        ["what is my ", "what are my ", "whats my ", "what's my ", "who am i"],
                         ["oh i know! %0",
                          "here's what i know: %0"]),
             message_set(self.what_do_i,
@@ -353,6 +354,9 @@ class Remember:
         if str(message.author.id) not in self._data:
             
             return [None, "i'm afraid that i don't know who you are. you'll have to let me remember your name first."]
+        
+        if "who am i" in message.content.strip():
+            return ["your name is " + self._data[str(message.author.id)].get_name()]
         
         st = message.content.partition(split_type)[2]
         if (st.strip() in ["name", "name?"]): return ["your name is " + self._data[str(message.author.id)].get_name()]
@@ -567,15 +571,26 @@ class Interactions:
     def __init__(self):
         
         self.set = [
-            
+            message_set(self.empty,
+                        ["are you awake"],
+                        ["yeah", "yeah i'm awake!",
+                         "i am indeed awake", "yup",
+                         "yes"]),
             message_set(self.empty,
                         ["tell me a joke"],
                         ["if only i was funny :(",
                          "aww i don't know any good ones."]),
             message_set(self.empty,
-                        ["love you", "proud of you"],
+                        ["are you gay"],
+                        ["no i like girl bots."]),
+            message_set(self.empty,
+                        ["love you", "proud of you", "youre the best", "you're the best",
+                         "you're awesome", "youre awesome", "you're cute", "youre cute",
+                         "like you"],
                         ["aww thank you :blush:",
-                         "that means a lot :blush:"]),
+                         "that means a lot :blush:",
+                         "yay :blush:",
+                         "how pog of you to say that :)"]),
             message_set(self.empty,
                         ["hate you", "screw you"],
                         ["wow. :pensive:",
@@ -1042,7 +1057,48 @@ class Definitions:
         return [None, "i couldn't find that word specifically, but here are some words that are close: " + st]
             
             
+class Stonks:
+    
+    def __init__(self):
         
+        self.set = [
+            message_set(self.get_data,
+                        ["stock data for ",
+                         "stock price of ",
+                         "stonk data for ",
+                         "stonk price of "],
+                        ["yeah i can do that. here's what i found for %0 (i can't get today's so here's yesterday's):\n\nOpen: %1\tClose: %4\nHigh: %2\tLow: %3",
+                         "sure! here's stock data for %0 (i can't get today's so here's yesterday's):\n\nOpen: %1\tClose: %4\nHigh: %2\tLow: %3",
+                         "got it. here's data for %0 (i can't get today's so here's yesterday's):\n\nOpen: %1\tClose: %4\nHigh: %2\tLow: %3"])
+            ]
+        
+    def get_msgs(self):
+        return self.set
+        
+    def get_data(self, message):
+        
+        if "of " in message.content: spl = "of "
+        else: spl = "for "
+        
+        msg = message.content.partition(spl)[2].replace("?", "")
+        
+        yesterday = datetime.now() - timedelta(1)
+        try:
+            with urllib.request.urlopen("https://api.polygon.io/v1/open-close/" + msg.upper() + "/" + datetime.strftime(yesterday, "%Y-%m-%d") + "?unadjusted=true&apiKey=" + key_polygonkey) as url:
+                data = json.loads(url.read().decode())
+        except urllib.error.HTTPError as e:
+            if e.code == 429:
+                return [None, "i can't afford to do more than around 5 requests per minute LMAO how sad."]
+            else:
+                return [None, "hmm i couldn't find any stock data for that."]
+            
+        if data["status"] == "NOT_FOUND":
+            return [None, "hmm i couldn't find any stock data for that."]
+        
+        if data["status"] == "ERROR":
+            return [None, "i can't afford to do more than 5 requests per minute LMAO how sad."]
+        
+        return [msg, str(data["open"]), str(data["high"]), str(data["low"]), str(data["close"])]
     
 
 def add_message_set(init):
@@ -1056,6 +1112,7 @@ interactions = Interactions()
 mathematics = Mathematics()
 northwestern = Northwestern()
 definitions = Definitions()
+stonks = Stonks()
 
 whitelist = ["Blockhead7360#5000"]
 
@@ -1156,6 +1213,7 @@ def history(message):
 add_message_set(ignore.get_msgs())
 add_message_set(definitions.get_msgs())
 add_message_set(northwestern.get_msgs())
+add_message_set(stonks.get_msgs())
 add_message_set(remember.get_msgs())
 add_message_set(mathematics.get_msgs())
 add_message_set(interactions.get_msgs())
