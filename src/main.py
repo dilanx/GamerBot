@@ -9,7 +9,7 @@ import urllib
 from datetime import datetime, timedelta
 import json
 
-VERSION = "1.6 (absolutely insane)"
+VERSION = "1.7 (absolutely insane)"
 dev = False
 
 load_dotenv()
@@ -27,9 +27,73 @@ link_help = "http://docs.blockhead7360.com/GamerBot"
 name = "gamer bot"
 
 sets = []
+
+learn_sets = {}
     
     #add_message_set(basics.init())
 #    add_message_set(ignore.init())
+
+class Learn:
+    
+    def __init__(self):
+        
+        self._load()
+        self.set = [
+            message_set(self.learn,
+                        ["learn that & is like saying "],
+                        ["ooh okay thanks for teaching me!",
+                         "ahh okay i'll remember that.",
+                         "okay got it now thanks!",
+                         "ohh so that's what that means. thanks!"])
+            
+            ]
+        
+    def get_msgs(self):
+        return self.set
+    
+    def learn(self, message):
+        
+        msg = message.content.partition("learn that ")[2]
+        
+        if msg.startswith("saying "):
+            msg = msg.partition("saying ")[2]
+            
+        if " is like saying " in msg:
+            msg = msg.split(" is like saying ")
+                    
+        understood = False
+        
+        for s in sets:
+            if s.should_activate(msg[1]):
+                
+                understood = True
+                
+        
+        if not understood: return [None, "wait i don't know what \"" + msg[1] + " \"means"]
+        
+        learn_sets[msg[0]] = msg[1]
+        self._save()
+        
+        return [""]
+    
+    def _load(self):
+        
+        with open("data/learn.txt", "r") as reader:
+            learnmsgs = reader.readlines()
+            
+        for line in learnmsgs:
+            
+            both = line.split(" !LEARN_MSG! ")
+            
+            learn_sets[both[0]] = both[1]
+        
+    
+    def _save(self):
+            
+        with open("data/learn.txt", "w") as writer:
+            for line in learn_sets.keys():
+                writer.write(line + " !LEARN_MSG! " + learn_sets[line])
+            
 
 class Ignore:
     
@@ -1106,6 +1170,7 @@ def add_message_set(init):
     for i in init:
         sets.append(i)
 
+learn = Learn()
 ignore = Ignore()
 remember = Remember()
 interactions = Interactions()
@@ -1173,6 +1238,12 @@ async def on_message(message):
                     await message.channel.send("you aren't whitelisted to use /spd.")
                     return
         
+        for ls in learn_sets.keys():
+        
+            if ls in message.content:
+            
+                message.content = message.content.replace(ls, learn_sets[ls])
+        
         for s in sets:
             
             if s.should_activate(message.content):
@@ -1204,12 +1275,11 @@ async def on_ready():
     
 def history(message):
     
-    
-    
     with open("data/history/" + str(message.author.id) + ".txt", "a") as writer:
             writer.write("[" + datetime.now().strftime("%Y-%m-%d %H:%M:%S") \
                          + "] [" + str(message.channel.id) + "] " + message.content + "\n")
 
+add_message_set(learn.get_msgs())
 add_message_set(ignore.get_msgs())
 add_message_set(definitions.get_msgs())
 add_message_set(northwestern.get_msgs())
