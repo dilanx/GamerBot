@@ -23,5 +23,5 @@ If your curious about how the external data works, here's where the bot gets its
 
 Dictionary and thesaurus data: [Merriam-Webster Dictionary API](https://dictionaryapi.com)  
 Northwestern data: I just scrape it off their publicly-accessible [course](https://catalogs.northwestern.edu/undergraduate/courses-az/) and [COVID-19](https://www.northwestern.edu/coronavirus-covid-19-updates/university-status/dashboard/) websites lol  
-Stock data: [Polygon.io API](https://polygon.io)
-Music data: [Genius API](https://docs.genius.com)
+Stock data: [Polygon.io API](https://polygon.io)  
+Music data: [Genius API](https://docs.genius.com)  
