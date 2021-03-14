@@ -8,8 +8,10 @@ from bs4 import BeautifulSoup
 import urllib
 from datetime import datetime, timedelta
 import json
+import requests
+import mendeleev
 
-VERSION = "1.7 (absolutely insane)"
+VERSION = "1.8 (extremely cracked)"
 dev = False
 
 load_dotenv()
@@ -19,10 +21,9 @@ key_discordtoken = os.getenv("DISCORD-TOKEN")
 key_merriamwebsterdictkey = os.getenv("MW-DICT-KEY")
 key_merriamwebstertheskey = os.getenv("MW-THES-KEY")
 key_polygonkey = os.getenv("POLYGON-KEY")
+key_geniustoken = os.getenv("GENIUS-TOKEN")
 
 link_help = "http://docs.blockhead7360.com/GamerBot"
-
-
 
 name = "gamer bot"
 
@@ -63,13 +64,19 @@ class Learn:
                     
         understood = False
         
+        for al in learn_sets.keys():
+            
+            if msg[1] == al:
+                
+                understood = True
+        
         for s in sets:
             if s.should_activate(msg[1]):
                 
                 understood = True
                 
         
-        if not understood: return [None, "wait i don't know what \"" + msg[1] + " \"means"]
+        if not understood: return [None, "wait i don't know what \"" + msg[1] + "\" means"]
         
         learn_sets[msg[0]] = msg[1]
         self._save()
@@ -92,7 +99,7 @@ class Learn:
             
         with open("data/learn.txt", "w") as writer:
             for line in learn_sets.keys():
-                writer.write(line + " !LEARN_MSG! " + learn_sets[line])
+                writer.write(line + " !LEARN_MSG! " + learn_sets[line] + "\n")
             
 
 class Ignore:
@@ -1164,6 +1171,161 @@ class Stonks:
         
         return [msg, str(data["open"]), str(data["high"]), str(data["low"]), str(data["close"])]
     
+class Music:
+    
+    def __init__(self):
+        
+        self.set = [
+            message_set(self.get_by_lyrics,
+                        [" song that goes "],
+                        ["ooh okay maybe it's one of these?\n\n%0",
+                         "i found these. hopefully it's one of them.\n\n%0",
+                         "i think i found it?\n\n%0",
+                         "hmm maybe it's one of these?\n\n%0",
+                         "i think you might be talking about one of these.\n\n%0"])
+            ]
+        
+    def get_msgs(self):
+        return self.set
+    
+    def get_by_lyrics(self, message):
+        
+        msg = message.content.partition(" that goes ")[2]
+        
+        try:
+            
+            PARAMS = {'access_token':key_geniustoken}
+        
+            r = requests.get(url = "https://api.genius.com/search?q=" + urllib.parse.quote_plus(msg), params = PARAMS)
+            data = r.json()
+            
+            hits = data["response"]["hits"]
+            
+            if (len(hits)) == 0:
+                return [None, "i couldn't find anything, sorry!"]
+            
+            st = ""
+            
+            for hit in hits:
+                st += "**" + hit["result"]["title"] + "** by " + hit["result"]["primary_artist"]["name"] + "\n"
+                
+            return [st]
+            
+        except:
+            
+            return [None, "oh noooo something went wrong i'm sorry :("]
+        
+class Chemistry:
+    
+    def __init__(self):
+        
+        self.set = [
+            message_set(self.get_all_data,
+                        ["element data for "],
+                        ["okay here's some data i found for %0 (%1):\n\n%4\n\nAtomic number: %2\nAtomic weight: %3"]),
+            message_set(self.get_name,
+                        [" name for "],
+                        ["the name for %0? that's %1.",
+                         "i believe the name for %0 is %1.",
+                         "i think the name for %0 is %1."]),
+            message_set(self.get_symbol,
+                        [" symbol for "],
+                        ["i think the symbol for %0 is %1."]),
+            message_set(self.get_atomic_number,
+                        [" atomic number of "],
+                        ["i believe the atomic number of %0 is %1."]),
+            message_set(self.get_atomic_weight,
+                        [" atomic weight of ",
+                         " atomic mass of "],
+                        ["the atomic weight of %0 is %1."]),
+            message_set(self.get_description,
+                        ["tell me about the element ",
+                         "description of the element "],
+                        ["sure! here's what i know about %0 (%1):\n\n%2"])
+            ]
+        
+    def get_msgs(self):
+        return self.set
+    
+    def get_data(self, el):
+        
+        try:
+            el = el.capitalize()
+            e = mendeleev.element(el)
+        except:
+            return None
+        
+        # name, symbol, number, weight, desc
+        return [e.name, e.symbol, e.atomic_number, e.atomic_weight, e.description]
+        
+    def get_all_data(self, message):
+        
+        msg = message.content.partition("element data for ")[2]
+        
+        data = self.get_data(msg)
+        
+        if data is None:
+            return [None, "hmm i don't know."]
+        
+        return [data[0], data[1], str(data[2]), str(data[3]), data[4]]
+        
+    def get_name(self, message):
+        
+        msg = message.content.partition(" name for ")[2]
+        
+        data = self.get_data(msg)
+        
+        if data is None:
+            return [None, "hmm i don't know."]
+        
+        return [msg.capitalize(), data[0]]
+    
+    def get_symbol(self, message):
+        
+        msg = message.content.partition(" symbol for ")[2]
+        
+        data = self.get_data(msg)
+        
+        if data is None:
+            return [None, "hmm i don't know."]
+        
+        return [msg.capitalize(), data[1]]
+    
+    def get_atomic_number(self, message):
+        
+        msg = message.content.partition(" atomic number of ")[2]
+        
+        data = self.get_data(msg)
+        
+        if data is None:
+            return [None, "hmm i don't know."]
+        
+        return [data[0], str(data[2])]
+    
+    def get_atomic_weight(self, message):
+        
+        msg = message.content.partition(" of ")[2]
+        
+        data = self.get_data(msg)
+        
+        if data is None:
+            return [None, "hmm i don't know."]
+        
+        return [data[0], str(data[3])]
+    
+    def get_description(self, message):
+        
+        msg = message.content.partition(" the element ")[2]
+        
+        data = self.get_data(msg)
+        
+        if data is None:
+            return [None, "hmm i don't know."]
+    
+        
+        return [data[0], data[1], data[4]]
+        
+        
 
 def add_message_set(init):
     
@@ -1178,6 +1340,8 @@ mathematics = Mathematics()
 northwestern = Northwestern()
 definitions = Definitions()
 stonks = Stonks()
+music = Music()
+chemistry = Chemistry()
 
 whitelist = ["Blockhead7360#5000"]
 
@@ -1207,17 +1371,6 @@ async def on_message(message):
             if cmd == "version":
                 await message.channel.send(VERSION)
                 return
-            
-            if cmd.startswith("forcesend "):
-                
-                if str(message.author) in whitelist:
-
-                    await message.channel.send(cmd.partition("forcesend ")[2])
-                    return
-                
-                else:
-                    await message.channel.send("you aren't whitelisted to use /forcesend.")
-                    return
                 
             if cmd.startswith("spd "):
                 
@@ -1280,10 +1433,12 @@ def history(message):
                          + "] [" + str(message.channel.id) + "] " + message.content + "\n")
 
 add_message_set(learn.get_msgs())
+add_message_set(music.get_msgs())
 add_message_set(ignore.get_msgs())
 add_message_set(definitions.get_msgs())
 add_message_set(northwestern.get_msgs())
 add_message_set(stonks.get_msgs())
+add_message_set(chemistry.get_msgs())
 add_message_set(remember.get_msgs())
 add_message_set(mathematics.get_msgs())
 add_message_set(interactions.get_msgs())
