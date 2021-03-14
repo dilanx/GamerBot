@@ -34,9 +34,14 @@ It even knows synonyms and antonyms for words, so you could be like `gamer bot w
 ### Stonks
 Gamer bot had a minor in economics back in bot college so it can give you stock data when you ask it something like `gamer bot give me the stock data for aapl`.
 
+### Music
+Gamer bot loves music and knows the lyrics to like every song ever. If you're like `gamer bot what's the song that goes hey now youre an all star` or something like that, it'll give you a list of songs you might be thinking of. 
+
 ### Bye
 Let me know if you want to add something to gamer bot and I'll show you how it's set up. If you know some Python and wanna make cool stuff this is fun. Also let me know if you wanna see how your save data looks and I can show you what gamer bot knows about you. This is really fun so I'm gonna add a ton of random stuff over time.
 
 Code: [https://github.com/Blockhead7360/GamerBot](https://github.com/Blockhead7360/GamerBot)
 
 Changelog: [http://docs.blockhead7360.com/changelogs/swwa-20010](http://docs.blockhead7360.com/changelogs/swwa-20010)
+
+[Ooh are you wondering where GamerBot gets its external data?? Hmm...](https://github.com/Blockhead7360/GamerBot/README.md)
