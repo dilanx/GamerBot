@@ -44,4 +44,4 @@ Code: [https://github.com/Blockhead7360/GamerBot](https://github.com/Blockhead73
 
 Changelog: [http://docs.blockhead7360.com/changelogs/swwa-20010](http://docs.blockhead7360.com/changelogs/swwa-20010)
 
-[Ooh are you wondering where GamerBot gets its external data?? Hmm...](https://github.com/Blockhead7360/GamerBot/README.md)
+[Ooh are you wondering where GamerBot gets its external data?? Hmm...](https://github.com/Blockhead7360/GamerBot/blob/main/README.md)
