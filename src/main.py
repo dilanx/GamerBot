@@ -30,6 +30,8 @@ name = "gamer bot"
 sets = []
 
 learn_sets = {}
+
+awake_time = None
     
     #add_message_set(basics.init())
 #    add_message_set(ignore.init())
@@ -647,6 +649,12 @@ class Interactions:
                         ["yeah", "yeah i'm awake!",
                          "i am indeed awake", "yup",
                          "yes"]),
+            message_set(self.awake,
+                        ["how long have you been awake"],
+                        ["i've been up for like %0.",
+                         "it's been %0 since i woke up.",
+                         "currently around %0.",
+                         "%0 lol."]),
             message_set(self.empty,
                         ["tell me a joke"],
                         ["if only i was funny :(",
@@ -670,6 +678,12 @@ class Interactions:
             message_set(self.empty,
                         ["how are you made", "how were you made"],
                         ["check it out!\ncode: https://github.com/blockhead7360/gamerbot\nupdate log: http://docs.blockhead7360.com/changelogs/swwa-20010"]),
+            message_set(self.empty,
+                        ["who made you", "who created you",
+                         "who is your creator", "who's your creator",
+                         "whos your creator"],
+                        ["why, master dilan himself.",
+                         "dilan made me!"]),
             message_set(self.empty,
                         ["how are you"],
                         ["i'm doing alright, thanks!",
@@ -702,6 +716,13 @@ class Interactions:
     def empty(self, message):
         
         return [""]
+    
+    def awake(self, message):
+        
+        diff = datetime.now() - awake_time
+        
+        return [str(diff.total_seconds()) + " seconds"]
+        
     
     def what_do_you(self, message):
         
@@ -1267,7 +1288,7 @@ class Chemistry:
         if data is None:
             return [None, "hmm i don't know."]
         
-        return [data[0], data[1], str(data[2]), str(data[3]), data[4]]
+        return [data[0], data[1], str(data[2]), str(data[3]), str(data[4])]
         
     def get_name(self, message):
         
@@ -1321,6 +1342,9 @@ class Chemistry:
         
         if data is None:
             return [None, "hmm i don't know."]
+        
+        if data[4] is None:
+            return [None, "aww i don't have a description for that element."]
     
         
         return [data[0], data[1], data[4]]
@@ -1425,6 +1449,10 @@ async def on_message(message):
 async def on_ready():
     listening = discord.Activity(type=discord.ActivityType.listening, name="gamer music")
     await client.change_presence(activity=listening)
+    
+    global awake_time
+    
+    awake_time = datetime.now()
     
 def history(message):
     
