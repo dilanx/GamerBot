@@ -40,6 +40,9 @@ Gamer bot loves music and knows the lyrics to like every song ever. If you're li
 ### Chemistry
 Gamer bot used to be a chemist so it has the periodic table memorized. You can be like `gamer bot what's the name for Fe` or `gamer bot what's the atomic number of gold` or `gamer bot give me a description of the element sulfur` and it'll tell you.
 
+### Learning
+Gamer bot wasn't born with the knowledge of every single phrase. However, it does know a bunch already. If it knows something that's similar to what you're saying but it doesn't know the exact phrase you're using to say it, feel free to teach it! For example, gamer bot reacts when you say something like `gamer bot you're awesome` but might not understand when you say `gamer bot you're great`, which should pretty much result in the same response. You can teach gamer bot that they're similar by saying `gamer bot learn that saying you're awesome is like saying you're great`. It'll remember that and you can now use both interchangeably.
+
 ### Bye
 Let me know if you want to add something to gamer bot and I'll show you how it's set up. If you know some Python and wanna make cool stuff this is fun. Also let me know if you wanna see how your save data looks and I can show you what gamer bot knows about you. This is really fun so I'm gonna add a ton of random stuff over time.
 
