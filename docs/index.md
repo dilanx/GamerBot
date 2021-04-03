@@ -43,6 +43,9 @@ Gamer bot used to be a chemist so it has the periodic table memorized. You can b
 ### Learning
 Gamer bot wasn't born with the knowledge of every single phrase. However, it does know a bunch already. If it knows something that's similar to what you're saying but it doesn't know the exact phrase you're using to say it, feel free to teach it! For example, gamer bot reacts when you say something like `gamer bot you're awesome` but might not understand when you say `gamer bot you're great`, which should pretty much result in the same response. You can teach gamer bot that they're similar by saying `gamer bot learn that saying you're awesome is like saying you're great`. It'll remember that and you can now use both interchangeably.
 
+### Weather
+Oh I almost forgot to mention that gamer bot had a part time job as a meteorologist, so it knows the weather of like every place on the planet. Ask something like `gamer bot what's the weather in chicago` or something and you'll find out.
+
 ### Bye
 Let me know if you want to add something to gamer bot and I'll show you how it's set up. If you know some Python and wanna make cool stuff this is fun. Also let me know if you wanna see how your save data looks and I can show you what gamer bot knows about you. This is really fun so I'm gonna add a ton of random stuff over time.
 
