@@ -6,7 +6,7 @@ The main idea of GamerBot is to be able to talk to it using normal people senten
 ## About the code
 Hello okay I've never made anything with Python before so I thought I'd learn it by making a Discord bot. All languages are close enough to each other conceptually so it was easy to figure out. If you see a bunch of stuff in the code that could've been written more efficiently or that isn't standard Python convention, at least you know why now.
 
-Also most of the code is in one file because when I tried putting them in multiple files I kept getting circular dependency errors and I didn't really know nor have the time to learn how to fix that so whatever. The code is still structured in a way that I can separate out into separate files later on.
+Also most of the code is in one file because when I tried putting them in multiple files I kept getting circular dependency errors and I didn't really know nor have the time to learn how to fix that so whatever. The code is still structured in a way that I can separate out into separate files later on, which I probably will do. Sorry about the ugliness I'm not like this with my other code I promise lol.
 
 ## Changelog
 See all of GamerBot's features here: http://docs.blockhead7360.com/changelogs/swwa-20010
@@ -25,3 +25,4 @@ Dictionary and thesaurus data: [Merriam-Webster Dictionary API](https://dictiona
 Northwestern data: I just scrape it off their publicly-accessible [course](https://catalogs.northwestern.edu/undergraduate/courses-az/) and [COVID-19](https://www.northwestern.edu/coronavirus-covid-19-updates/university-status/dashboard/) websites lol  
 Stock data: [Polygon.io API](https://polygon.io)  
 Music data: [Genius API](https://docs.genius.com)  
+Weather data: [OpenWeatherMap](https://openweathermap.org)
