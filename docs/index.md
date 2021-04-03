@@ -49,8 +49,8 @@ Oh I almost forgot to mention that gamer bot had a part time job as a meteorolog
 ### Bye
 Let me know if you want to add something to gamer bot and I'll show you how it's set up. If you know some Python and wanna make cool stuff this is fun. Also let me know if you wanna see how your save data looks and I can show you what gamer bot knows about you. This is really fun so I'm gonna add a ton of random stuff over time.
 
-Code: [https://github.com/Blockhead7360/GamerBot](https://github.com/Blockhead7360/GamerBot)
+Code: [https://github.com/dilanx/GamerBot](https://github.com/dilanx/GamerBot)
 
 Changelog: [http://docs.blockhead7360.com/changelogs/swwa-20010](http://docs.blockhead7360.com/changelogs/swwa-20010)
 
-[Ooh are you wondering where GamerBot gets its external data?? Hmm...](https://github.com/Blockhead7360/GamerBot/blob/main/README.md)
+[Ooh are you wondering where GamerBot gets its external data?? Hmm...](https://github.com/dilanx/GamerBot/blob/main/README.md)
