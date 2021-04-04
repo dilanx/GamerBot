@@ -62,6 +62,14 @@ def why_do_you(message):
     
     return None
 
+def bw_addict(message):
+    
+    if (message.author.id == 396422982857392139):
+        
+        return [""]
+        
+    return None
+
 
 msg_set = [
     message_set(empty,
@@ -69,10 +77,17 @@ msg_set = [
                 ["yeah", "yeah i'm awake!",
                  "i am indeed awake", "yup",
                  "yes"]),
+    message_set(bw_addict,
+                ["s!bw ", "s!bedwars "],
+                ["claire you're literally addicted to bed wars.",
+                 "dude claire so much bed wars lmaoo.",
+                 "you're so addicted claire."]),
     message_set(empty,
-                ["can you see this", "can you read this"],
-                ["yes i can!", "yeah i'm here!",
-                 "sure can"]),
+                ["can you see this", "can you read this", "you there?"],
+                ["yup", "yeah i'm here!",
+                 "haha yeah i'm here",
+                 "ya i'm here",
+                 "yeah"]),
     message_set(awake,
                 ["how long have you been awake"],
                 ["i've been up for like %0.",
@@ -110,7 +125,7 @@ msg_set = [
                  "i'm trying my best :cry:"]),
     message_set(empty,
                 ["how are you made", "how were you made"],
-                ["check it out!\ncode: https://github.com/blockhead7360/gamerbot\nupdate log: http://docs.blockhead7360.com/changelogs/swwa-20010"]),
+                ["check it out!\ncode: <https://github.com/blockhead7360/gamerbot>\nupdate log: <http://docs.blockhead7360.com/changelogs/swwa-20010>"]),
     message_set(empty,
                 ["who made you", "who created you",
                  "who is your creator", "who's your creator",
