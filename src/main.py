@@ -13,7 +13,7 @@ from sets import learn, remember, interactions, \
     chemistry, weather
 
 
-VERSION = "1.10 (absolutely cracked at this game)"
+VERSION = "1.11 (more cracked at this game than ever before)"
 dev = False
 
 client = discord.Client()
