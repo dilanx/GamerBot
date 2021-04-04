@@ -120,6 +120,9 @@ class profile_set:
         if msg[0] == "they":
             fourth = "are"
         
+        if msg[2] == "hers":
+            msg[2] = "her"
+        
         self.pronouns = [msg[0], msg[1], msg[2], fourth]
         self.save()
         return True

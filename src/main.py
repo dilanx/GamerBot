@@ -99,7 +99,9 @@ async def on_message(message):
                         msg = s.random_message()
                     
                     if "@everyone" in msg or "@here" in msg:
-                        await message.channel.send("Don't force gamer bot to ping everyone :(")
+                        await message.channel.send("don't force gamer bot to ping everyone :(")
+                    elif len(msg) > 2000:
+                        await message.channel.send("umm discord won't let me send something this long :(")
                     else:
                         await message.channel.send(msg)
 
