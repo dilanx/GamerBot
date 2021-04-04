@@ -4,8 +4,7 @@ from message_groups import message_set
 import sets.remember as remember
 
 awake_time = 0
-link_help = "http://docs.blockhead7360.com/GamerBot"
-
+link_help = "<http://docs.blockhead7360.com/GamerBot>"
 
 def empty(message):
         

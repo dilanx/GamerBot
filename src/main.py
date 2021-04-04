@@ -10,8 +10,6 @@ from sets import learn, remember, interactions, \
     mathematics, northwestern, definitions, stonks, music, \
     chemistry, weather
 
-
-
 VERSION = "1.10 (absolutely cracked at this game)"
 dev = False
 
@@ -22,9 +20,6 @@ key_discordtoken = utility.keys["DISCORD-TOKEN"]
 link_help = "http://docs.blockhead7360.com/GamerBot"
 
 sets = []
-    
-    #add_message_set(basics.init())
-#    add_message_set(ignore.init())
 
 def add_message_set(init):
     
@@ -133,7 +128,6 @@ add_message_set(interactions.msg_set)
 add_message_set(remember.msg_set_LOW)
 learn.main_sets = sets
 
-# lmao no i'm not letting the bot token appear on github
 client.run(key_discordtoken)
 
 
