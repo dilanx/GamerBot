@@ -32,7 +32,7 @@ Gamer bot also has a degree in English so you can ask it what any word means. As
 It even knows synonyms and antonyms for words, so you could be like `gamer bot what's another word for hello` or `gamer bot what's the opposite of stop` and it'll tell you everything it knows.
 
 ### Stonks
-Gamer bot had a minor in economics back in bot college so it can give you stock data when you ask it something like `gamer bot give me the stock data for aapl`.
+Gamer bot had a minor in economics back in bot college so it can give you stock data when you ask it something like `gamer bot give me the stock data for aapl`, or even crypto data if you're like `gamer bot show me the value of btc`.
 
 ### Music
 Gamer bot loves music and knows the lyrics to like every song ever. If you're like `gamer bot what's the song that goes hey now youre an all star` or something like that, it'll give you a list of songs you might be thinking of.
