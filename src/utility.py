@@ -1,4 +1,14 @@
+import csv
 import random
+
+keys = {}
+
+def load_keys():
+    
+    with open(".keys.csv") as file:
+        reader = csv.reader(file, delimiter="=")
+        for line in reader:
+            keys[line[0]] = line[1]
 
 def r_msg(msgs):
     
@@ -10,8 +20,6 @@ def in_msg(msg, arr):
         if i in msg: return True
         
     return False
-    
-    
 
 def get_ping_id(content):
     
@@ -21,7 +29,9 @@ def get_ping_id(content):
         
     else:
         return None
-    
+
+
+
 class SubjectPronounDictionary:
     
     def __init__(self):
