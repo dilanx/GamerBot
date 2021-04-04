@@ -14,6 +14,16 @@ def hello(message):
     
     return [your_name]
 
+def gn(message):
+    
+    if str(message.author.id) not in _data:
+        
+        return [None, "good night!"]
+    
+    your_name = _data[str(message.author.id)].get_name()
+    
+    return [your_name]
+
 def new(message):
         
     if str(message.author.id) in _data:
@@ -422,6 +432,11 @@ msg_set_LOW = [
              "hello %0!!",
              "hey %0! how are you?",
              "hi %0! how are you doing?",
-             "hello %0. how are you?"])
+             "hello %0. how are you?"]),
+    message_set(gn,
+                ["good night gamer bot", "gn gamer bot"],
+                ["good night %0! sleep well!",
+                 "gn %0 :)", "good night %0! get some rest :)",
+                 "have a good night %0!"])
     
     ]

@@ -1,6 +1,8 @@
 from datetime import datetime
+import time
 
 import discord
+
 import utility
 
 utility.load_keys()
@@ -9,6 +11,7 @@ from message_groups import spd
 from sets import learn, remember, interactions, \
     mathematics, northwestern, definitions, stonks, music, \
     chemistry, weather
+
 
 VERSION = "1.10 (absolutely cracked at this game)"
 dev = False
@@ -101,6 +104,14 @@ async def on_message(message):
                         await message.channel.send(msg)
 
                 return
+    
+    # easter egg lmao
+    if "s!bw " in message.content or "s!bedwars " in message.content:
+        if message.author.id == 396422982857392139 and message.channel.id == 710353578971365399:
+            time.sleep(3)
+            await message.channel.send(utility.r_msg(["claire you're addicted to bed wars.",
+                                                      "dude so much bed wars claire lmaoo.",
+                                                      "ahh so addicted to bed wars claire."]))
                 
 @client.event
 async def on_ready():

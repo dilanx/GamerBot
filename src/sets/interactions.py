@@ -62,26 +62,12 @@ def why_do_you(message):
     
     return None
 
-def bw_addict(message):
-    
-    if (message.author.id == 396422982857392139):
-        
-        return [""]
-        
-    return None
-
-
 msg_set = [
     message_set(empty,
                 ["are you awake"],
                 ["yeah", "yeah i'm awake!",
                  "i am indeed awake", "yup",
                  "yes"]),
-    message_set(bw_addict,
-                ["s!bw ", "s!bedwars "],
-                ["claire you're literally addicted to bed wars.",
-                 "dude claire so much bed wars lmaoo.",
-                 "you're so addicted claire."]),
     message_set(empty,
                 ["can you see this", "can you read this", "you there?"],
                 ["yup", "yeah i'm here!",
