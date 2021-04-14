@@ -6,14 +6,15 @@ import discord
 import utility
 
 utility.load_keys()
+utility.connect_mysql()
 
 from message_groups import spd
 
 from sets import learn, remember, interactions, \
     mathematics, northwestern, definitions, stonks, music, \
-    chemistry, weather
+    chemistry, weather, wbstats
 
-VERSION = "1.11 (more cracked at this game than ever before)"
+VERSION = "1.12 (more cracked at this game than ever before)"
 dev = False
 
 client = discord.Client()
@@ -38,12 +39,18 @@ async def on_message(message):
     
     message.content = message.content.lower()
     
+    if message.content.startswith("s!wb "):
+        message.content = message.content.replace("s!wb ", "gamer bot wed bars stats for ")
+    elif message.content.startswith("s!wb"):
+        message.content = message.content.replace("s!wb", "gamer bot my wed bars stats")
+        
+    
     if "gamer bot" in message.content:
         
         if dev:
             
             if str(message.author) not in whitelist:
-                await message.channel.send("aww sorry i can't respond rn. i'm in developer mode.")
+                await message.channel.send("aww sorry i can't respond rn. i'm in developer mode. dilan is updating me :)")
                 return
             
         history(message)
@@ -74,6 +81,25 @@ async def on_message(message):
                 else:
                     await message.channel.send("you aren't whitelisted to use /spd.")
                     return
+            
+            if cmd.startswith("sql "):
+                
+                if str(message.author) in whitelist:
+                    
+                    response = utility.run_sql(cmd.partition("sql ")[2])
+                    
+                    if not response:
+                        await message.channel.send("aww i couldn't send that query :(")
+                        return
+                    
+                    await message.channel.send("i sent your query to the server (" + utility.keys["SQL-HOST"] + "/" + utility.keys["SQL-DB"] + ")"
+                                                + " and got the following response:\n" + str(response.fetchall()))
+                    return
+                
+                else:
+                    await message.channel.send("sorry! i'm not allowed to let you send queries.")
+                    return
+                
         
         for ls in learn.learn_sets.keys():
         
@@ -93,6 +119,14 @@ async def on_message(message):
                     if val[0] is None:
                         
                         msg = val[1]
+                    
+                    elif (type(val[0]) is discord.Embed):
+                        
+                        if len(val) == 2:
+                            await message.channel.send(val[1])
+                            
+                        await message.channel.send(embed=val[0])
+                        return
                     
                     else:
                         
@@ -135,6 +169,7 @@ def history(message):
 
 add_message_set(learn.msg_set)
 add_message_set(music.msg_set)
+add_message_set(wbstats.msg_set)
 add_message_set(definitions.msg_set)
 add_message_set(northwestern.msg_set)
 add_message_set(stonks.msg_set)

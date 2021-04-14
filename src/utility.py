@@ -1,7 +1,11 @@
 import csv
 import random
+import mysql.connector
 
 keys = {}
+mydb = None
+mydb_cursor = None
+
 
 def load_keys():
     
@@ -9,6 +13,29 @@ def load_keys():
         reader = csv.reader(file, delimiter="=")
         for line in reader:
             keys[line[0]] = line[1]
+            
+def connect_mysql():
+    
+    global mydb, mydb_cursor
+    
+    mydb = mysql.connector.connect(
+        host=keys["SQL-HOST"],
+        database=keys["SQL-DB"],
+        user=keys["SQL-USER"],
+        password=keys["SQL-PASS"]
+        )
+    
+    mydb_cursor = mydb.cursor()
+  
+def run_sql(query):
+    
+    try:
+        mydb_cursor.execute(query)
+        if not query.startswith("select"):
+            mydb.commit()
+        return mydb_cursor
+    except:
+        return False
 
 def r_msg(msgs):
     
