@@ -8,10 +8,10 @@ import utility
 utility.load_keys()
 
 from message_groups import spd
+
 from sets import learn, remember, interactions, \
     mathematics, northwestern, definitions, stonks, music, \
     chemistry, weather
-
 
 VERSION = "1.11 (more cracked at this game than ever before)"
 dev = False
@@ -113,7 +113,12 @@ async def on_message(message):
             time.sleep(3)
             await message.channel.send(utility.r_msg(["claire you're addicted to bed wars.",
                                                       "dude so much bed wars claire lmaoo.",
-                                                      "ahh so addicted to bed wars claire."]))
+                                                      "ahh so addicted to bed wars claire.",
+                                                      "claireee so much bed warsss.",
+                                                      "ahh yes the traditional claire bed wars addiction.",
+                                                      "haha claire go vroom in bed wars.",
+                                                      "i see you checking bed wars stats, claire.",
+                                                      "just a girlboss doing girlboss things."]))
                 
 @client.event
 async def on_ready():

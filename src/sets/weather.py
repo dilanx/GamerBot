@@ -4,7 +4,6 @@ import urllib
 from message_groups import message_set
 import utility
 
-
 key_openweathermap = utility.keys["OPENWEATHERMAP-KEY"]
 
 def get_weather_data(message):
@@ -27,8 +26,6 @@ def get_weather_data(message):
     desc_id = data["weather"][0]["id"]
     desc = data["weather"][0]["description"]
     temp = data["main"]["temp"]
-    low = data["main"]["temp_min"]
-    high = data["main"]["temp_max"]
     city = data["name"]
     
     if desc_id < 300:
@@ -40,7 +37,7 @@ def get_weather_data(message):
     else:
         weather = "there are " + desc
         
-    return [weather, city, str(temp), str(high), str(low)]
+    return [weather, city, str(temp)]
 
 msg_set = [
     message_set(get_weather_data,
@@ -52,8 +49,8 @@ msg_set = [
                 "temperature & at ",
                 "temp & in ",
                 "temp & at "],
-                ["good question! it looks like %0 in %1. the temperature there is %2 °F rn, with a %3 °F high and a %4 °F low.",
-                "ahh yeah %0 in %1 rn at a temperature of %2 °F. the high is %3 °F and the low is %4 °F.",
-                "ooh it looks like %0 in %1. it's %2 °F out right now, with a %3 °F high and a %4 °F low for today.",
-                "just checked and it looks like %0 in %1 at a temp of %2 °F. the high is %3 °F and the low is %4 °F."])
+                ["good question! it looks like %0 in %1. the temperature there is %2 °F rn.",
+                "ahh yeah %0 in %1 rn at a temperature of %2 °F.",
+                "ooh it looks like %0 in %1. it's %2 °F out right now.",
+                "just checked and it looks like %0 in %1 at a temp of %2 °F."])
     ]
