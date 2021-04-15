@@ -92,8 +92,13 @@ async def on_message(message):
                         await message.channel.send("aww i couldn't send that query :(")
                         return
                     
+                    response = response.fetchall()
+                    
+                    if (len(response) == 0): response = "success"
+                    else: response = str(response)
+                    
                     await message.channel.send("i sent your query to the server (" + utility.keys["SQL-HOST"] + "/" + utility.keys["SQL-DB"] + ")"
-                                                + " and got the following response:\n" + str(response.fetchall()))
+                                                + " and got the following response:\n" + response)
                     return
                 
                 else:

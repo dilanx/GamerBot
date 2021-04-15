@@ -10,6 +10,8 @@ import utility
 
 def get_stats(message):
     
+    utility.connect_mysql()
+    
     username = None
     uuid = None
     
@@ -17,7 +19,7 @@ def get_stats(message):
         
         name = message.content.partition(" for ")[2]
         
-        results = _get_uuid(name)
+        results = get_uuid(name)
         
         if results is None:
             
@@ -29,7 +31,7 @@ def get_stats(message):
         result = utility.run_sql("select color from discord_mc where minecraft = '" + uuid + "'")
         
         if not result:
-            
+
             return [None, "uh oh, i couldn't retrieve the data :("]
         
         result = result.fetchall()
@@ -57,7 +59,7 @@ def get_stats(message):
         result = result[0]
         
         uuid = result[1]
-        username = _get_username(uuid)
+        username = get_username(uuid)
     
         if username is None:
             username = "NULL USERNAME"
@@ -65,7 +67,7 @@ def get_stats(message):
     
     data = utility.run_sql("select * from wb_stats where uuid = '" + uuid + "'").fetchone()
     
-    embed = discord.Embed(title=username, color=result[0], timestamp=datetime.datetime.now())
+    embed = discord.Embed(title=username.replace("_", "\\_"), color=result[0])
     embed.set_thumbnail(url="https://crafatar.com/avatars/" + uuid)
     embed.set_footer(text="Wed Bars Statistics")
     
@@ -83,20 +85,20 @@ def get_stats(message):
         embed.add_field(name="Beds Broken", value=str(data[7]))
         embed.add_field(name="Beds Lost", value=str(data[8]))
         embed.add_field(name="BBBLR", value="**"+str(round(data[7] / data[8] if data[8] > 0 else data[7], 2))+"**")
-        embed.add_field(name="Deaths by Maids", value=str(data[9]))
+        embed.add_field(name="Deaths by Maids", value="unavailable") #str(data[9])
         embed.add_field(name="Blocks Placed", value=str(data[10]))
-        embed.add_field(name="Win Streak", value=str(data[11]))
+        embed.add_field(name="Win Streak", value="unavailable") #str(data[11])
         
     else:
         
-        embed.add_field(name="Invalid User", value="This player doesn't have any stats yet.")
+        embed.add_field(name="Invalid Wed Bars Player", value="This player doesn't have any stats yet.")
     
     return [embed, utility.r_msg(["here's the stats card :)",
                                   "i think i got it!",
                                   "here's what i found!",
                                   "i got the stats card!"])]
-
-def _get_username(uuid):
+    
+def get_username(uuid):
     
     try:
         with urllib.request.urlopen("https://api.mojang.com/user/profiles/" + uuid + "/names") as url:
@@ -111,7 +113,7 @@ def _get_username(uuid):
     except:
         return None
     
-def _get_uuid(username):
+def get_uuid(username):
     
     try:
         with urllib.request.urlopen("https://api.mojang.com/users/profiles/minecraft/" + username) as url:
