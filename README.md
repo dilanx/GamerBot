@@ -22,6 +22,9 @@ Northwestern data: I just scrape it off their publicly-accessible [course](https
 Stock data: [Polygon.io API](https://polygon.io)  
 Music data: [Genius API](https://docs.genius.com)  
 Weather data: [OpenWeatherMap](https://openweathermap.org)
+Minecraft username and UUID data: [Mojang API](https://api.mojang.com)
+Minecraft avatar data: [Crafatar](https://crafatar.com)
+
 
 ## Privacy and Data Handling
 I wanna work on some machine learning and AI stuff with this bc that sounds fun. So I should probably tell you that every time you send a message containing gamer bot's name in a channel it can access, it saves it to a file on my computer, noting your user id, channel id, and time as well :). This means if you sent a message to gamer bot but deleted it, I'd technically still be able to see it. If you don't want your messages to it saved let me know but like it's fine bro. Obviously all of the stuff you tell it to remember (your profile) is also saved because how else would it remember. Also if you're interested in how your save data looks (both message history and profile data), let me know and I can show it to you (I love talking about behind-the-scenes stuff lol). Also, it would be really cool if it could somewhat behave naturally like humans; for example, changing its mood depending on how people talk to it, and then forgetting about old feelings over time (hence the saving of messages and timestamps).

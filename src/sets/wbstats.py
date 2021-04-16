@@ -68,7 +68,7 @@ def get_stats(message):
     data = utility.run_sql("select * from wb_stats where uuid = '" + uuid + "'").fetchone()
     
     embed = discord.Embed(title=username.replace("_", "\\_"), color=result[0])
-    embed.set_thumbnail(url="https://crafatar.com/avatars/" + uuid)
+    embed.set_thumbnail(url="https://crafatar.com/avatars/" + uuid + "?overlay")
     embed.set_footer(text="Wed Bars Statistics")
     
     if data is not None:

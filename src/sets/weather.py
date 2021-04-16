@@ -10,8 +10,10 @@ def get_weather_data(message):
     
     if " in " in message.content:
         msg = message.content.partition(" in ")[2]
-    else:
+    elif " at " in message.content:
         msg = message.content.partition(" at ")[2]
+    else:
+        msg = "evanston";
         
     if " " in msg:
         msg = msg.split(" ")[0]
@@ -41,7 +43,8 @@ def get_weather_data(message):
 
 msg_set = [
     message_set(get_weather_data,
-                ["weather in ",
+                ["what is the weather",
+                "weather in ",
                 "weather at ",
                 "weather like in ",
                 "weather like at ",
