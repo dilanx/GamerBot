@@ -1,5 +1,7 @@
 # GamerBot  
 
+[GamerBot Twitch Bot](https://github.com/dilanx/gamerbot-twitch)
+
 ## About the bot
 The main idea of GamerBot is to be able to talk to it using normal people sentences and receive varied responses rather than just running commands. You can say hi to it, and you'll receive a response back. You can ask it to remember stuff about you like your name, what you're favorite things are, etc., and then others (or you yourself) can ask it about you. You can even ask it math questions, questions about Northwestern courses or COVID-19 data, ask it what a word means, or even get some stock or crypto data. Have a song stuck in your head but don't know the name? You can share lyrics with it and it'll give you some songs that might match what you're thinking of. Oh, and weather data is there, too. It's very smart and can answer all of that without even needing to look it up unlike you (totally 100% legit not clickbait). [See a list of all the things the bot can do.](http://docs.blockhead7360.com/GamerBot)
 
