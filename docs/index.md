@@ -22,7 +22,7 @@ Gamer bot has a degree in mathematics so you can ask it to evaluate any mathemat
 ### Northwestern
 Gamer bot has a side job at Northwestern University so it knows about every single Northwestern course, as well as all the COVID-19 data on campus.
 
-Ask it something like `gamer bot tell me about the cs 211 course` or `gamer bot find the description for this course: math 228-1` and it's got you covered with the course description and prereqs. If you remember part of the name rather than the number, you could even be like `gamer bot tell me about this course: cs fundamentals` and it'll search that subject's courses' names for what you want. Those statements are just examples. The idea is that you can ask it in multiple ways as long as it's clear what you're trying to ask. Like you could say `gamer bot search for this course: cs 110` or in a bunch of other ways as well.
+Ask it something like `gamer bot tell me about cs 211` or `gamer bot find the description for the math 228-1 course` and it's got you covered with the course description and prereqs. If you remember part of the name rather than the number, you could even be like `gamer bot tell me about the cs fundamentals courses` and it'll search that subject's courses' names for what you want. Those statements are just examples. The idea is that you can ask it in multiple ways as long as it's clear what you're trying to ask. Like you could say `gamer bot search for this course: cs 110` or in a bunch of other ways as well.
 
 If you wanna know whether you're gonna die if you go outside just ask it something like `gamer bot what's covid like on campus` or `gamer bot what are the covid cases like on campus` and it'll tell you.
 
@@ -45,6 +45,11 @@ Gamer bot wasn't born with the knowledge of every single phrase. However, it doe
 
 ### Weather
 Oh I almost forgot to mention that gamer bot had a part time job as a meteorologist, so it knows the weather of like every place on the planet. Ask something like `gamer bot what's the weather in chicago` or something and you'll find out.
+
+### Reminders
+Gamer bot's memory is so cracked that you can tell it to remind you about anything on a certain date at a certain time and it will. Say something like `gamer bot remind me to do my homework today at 10pm`, or `gamer bot remind me to be an epic gamer on saturday at 5pm`, or even `gamer bot remind me to be cool on january 1 2022 at 12:00am`. You'll get a ping in the same channel you messaged it in when the time comes.
+
+You can see all of your reminders by telling it something like `gamer bot show me my reminders` or `gamer bot what are you gonna remind me about` or something like that. You can also cancel a reminder by telling it something like `gamer bot don't remind me to do my homework` or `gamer bot no longer remind me to be an epic gamer`.
 
 ### Bye
 Let me know if you want to add something to gamer bot and I'll show you how it's set up. If you know some Python and wanna make cool stuff this is fun. Also let me know if you wanna see how your save data looks and I can show you what gamer bot knows about you. This is really fun so I'm gonna add a ton of random stuff over time.

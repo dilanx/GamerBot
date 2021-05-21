@@ -42,13 +42,31 @@ def get_covid_info(message):
 
 def get_course_desc(message):
     
+    silent = False
+    
     if "course: " in message.content:
         msg = message.content.partition("course: ")[2]
-    else:
+    elif "the" in message.content and " course" in message.content:
         msg = message.content.partition("the ")[2].partition(" course")[0]
+    else:
+        silent = True
+        msg = message.content.partition(" about ")[2]
+        if " " in msg:
+            sp = msg.split(" ")
+            
+            if len(sp) >= 2:
+                
+                msg = sp[0] + " " + sp[1]
+                
+            else:
+                return None
+            
+            
+            
     data = msg.split(" ")
     
     if len(data) < 2:
+        if silent: return None
         return [None, "hmm i don't understand your request. make sure you specify the course subject and number"]
     
     sq = msg.partition(" ")[2]
@@ -126,7 +144,11 @@ def get_course_desc(message):
                     
                 
                         
-        if len(found) == 0: return [None, "i couldn't find the class you're looking for :("]
+        if len(found) == 0:
+            
+            if silent: return None
+            
+            return [None, "i couldn't find the class you're looking for :("]
         
         st = "you didn't give me an exact course number to work with, but here's everything i found close to what you asked for:\n"
         
@@ -137,6 +159,7 @@ def get_course_desc(message):
         return [None, st]
         
     except:
+        if silent: return None
         return [None, "hmm, i couldn't find what you're looking for."]
     
 def _convert(name, number):
@@ -154,7 +177,7 @@ def _convert(name, number):
 
 msg_set = [
     message_set(get_course_desc,
-                [" course: ", " the & course"],
+                [" course: ", " the & course", "tell me about "],
                 ["ooh okay got it. here's a bit about %0 %1:\n\n**%2**\n%3",
                  "i found the course description for %0 %1:\n\n**%2**\n%3",
                  "here's info on %0 %1:\n\n**%2**\n%3"]),

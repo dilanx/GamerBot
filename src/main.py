@@ -2,20 +2,17 @@ from datetime import datetime
 import time
 
 import discord
-
-import utility
-
-utility.load_keys()
-utility.connect_mysql()
+from discord.ext import tasks
 
 from message_groups import spd
-
 from sets import learn, remember, interactions, \
     mathematics, northwestern, definitions, stonks, music, \
-    chemistry, weather, wbstats
+    chemistry, weather, wbstats, reminder
+import utility
 
-VERSION = "1.12 (more cracked at this game than ever before)"
-dev = False
+
+VERSION = "1.13 (being cracked is an understatement)"
+dev = True
 
 client = discord.Client()
 
@@ -25,12 +22,18 @@ link_help = "http://docs.blockhead7360.com/GamerBot"
 
 sets = []
 
+## Message set function return guide
+# None - exit out of current message set and continue searching
+# [None, <msg>] - force send message rather than any message set strings
+# [<embed>, <optional-msg>] - send the discord embed, optionally with a message
+
+
 def add_message_set(init):
     
     for i in init:
         sets.append(i)
 
-whitelist = ["Blockhead7360#1000"]
+whitelist = [203483343281455104]
 
 @client.event
 async def on_message(message):
@@ -49,7 +52,7 @@ async def on_message(message):
         
         if dev:
             
-            if str(message.author) not in whitelist:
+            if message.author.id not in whitelist:
                 await message.channel.send("aww sorry i can't respond rn. i'm in developer mode. dilan is updating me :)")
                 return
             
@@ -62,10 +65,33 @@ async def on_message(message):
             if cmd == "version":
                 await message.channel.send(VERSION)
                 return
+            
+            if cmd.startswith("acl "):
+                
+                if message.author.id in whitelist:
+                    
+                    sp = cmd.partition("acl ")[2].split(" ")
+                    
+                    if len(sp) != 1:
+                        await message.channel.send("fail.")
+                        return
+                    
+                    try:
+                        
+                        await client.get_channel(int(sp[0])).send(utility.changelog_msg)
+                    
+                    except:
+                        await message.channel.send("fail.")
+                        
+                    return
+                
+                else:
+                    await message.channel.send("you aren't whitelisted to use /acl.")
+                    return
                 
             if cmd.startswith("spd "):
                 
-                if str(message.author) in whitelist:
+                if message.author.id in whitelist:
                     
                     split = cmd.partition("spd ")[2].split(" ")
                     
@@ -84,7 +110,9 @@ async def on_message(message):
             
             if cmd.startswith("sql "):
                 
-                if str(message.author) in whitelist:
+                if message.author.id in whitelist:
+                    
+                    utility.connect_mysql()
                     
                     response = utility.run_sql(cmd.partition("sql ")[2])
                     
@@ -166,15 +194,49 @@ async def on_ready():
     
     interactions.awake_time = datetime.now()
     
+    remind.start()
+    
 def history(message):
     
     with open("data/history/" + str(message.author.id) + ".txt", "a") as writer:
             writer.write("[" + datetime.now().strftime("%Y-%m-%d %H:%M:%S") \
                          + "] [" + str(message.channel.id) + "] " + message.content + "\n")
 
+@tasks.loop(seconds=10.0)
+async def remind():
+        
+    cur_time = datetime.now().timestamp()
+    
+    to_remove = []
+    
+    need_to_save = False
+    
+    for reminder_time in reminder.reminders:
+        
+        if float(reminder_time) < cur_time:
+            
+            r = reminder.reminders[reminder_time]
+            
+            await client.get_channel(r.channel).send(utility.r_msg(reminder.reminder_msgs)
+                                                     .replace("%0", "<@" + str(r.sender) + ">").replace("%1", r.message))
+            
+            to_remove.append(reminder_time)
+            need_to_save = True
+            
+    for r in to_remove:
+        
+        del reminder.reminders[r]
+    
+    if need_to_save:
+        reminder.save()
+            
+    
+    
+
 add_message_set(learn.msg_set)
 add_message_set(music.msg_set)
 add_message_set(wbstats.msg_set)
+add_message_set(reminder.msg_set)
 add_message_set(definitions.msg_set)
 add_message_set(northwestern.msg_set)
 add_message_set(stonks.msg_set)
