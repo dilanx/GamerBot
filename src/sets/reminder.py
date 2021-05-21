@@ -56,7 +56,7 @@ def add_reminder(message):
         on = "tomorrow"
         sp = msg.split(" at ")
         to = sp[0].replace(" tomorrow", "").strip()
-        at = msg.split(" at ")[1].replace(" tomorrow", "").strip()
+        at = sp[1].replace(" tomorrow", "").strip()
     
     else:
         
