@@ -12,7 +12,7 @@ import utility
 
 
 VERSION = "1.13 (being cracked is an understatement)"
-dev = True
+dev = False
 
 client = discord.Client()
 
