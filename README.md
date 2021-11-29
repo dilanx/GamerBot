@@ -36,3 +36,8 @@ I wanna work on some machine learning and AI stuff with this bc that sounds fun.
 Gamer Bot is also on Twitch and can handle text commands. I use it on my occasional streams at [twitch.tv/blockhead7360](https://twitch.tv/blockhead7360).
 
 If you'd like to use it on yours, let me know. It's super easy to get some text commands ready, and I'll be adding more features soon.
+
+---
+
+# Reviews
+* "Better than katbot" - a11ce
